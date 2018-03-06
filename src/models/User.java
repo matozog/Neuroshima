@@ -107,6 +107,15 @@ public abstract class User {
 	public void setCardsDeck(ArrayList<Card> cardsDeck) {
 		this.cardsDeck = cardsDeck;
 	}
+	/**
+	 * Play card on board.
+	 */
+	public void attack(Card card, int posX, int posY) {
+		//TODO Add missing attributes 
+		card.setPosX(posX);
+		card.setPosY(posY);
+
+	}
 
 	@Override
 	public int hashCode() {
