@@ -1,5 +1,9 @@
 package models;
 
+import java.util.ArrayList;
+import java.lang.Integer;
+
+
 /**
  * Abstract class of a card.
  */
@@ -43,7 +47,6 @@ public abstract class Card {
 		this.owner = owner;
 	}
 	
-
 	public Card(){}
 
 	public Card(String cardType){
@@ -108,11 +111,13 @@ public abstract class Card {
 		return initiative;
 	}
 
-	public void setInitiative(int initiative) {
+	public void setIniiative(int initiative) {
 		this.initiative = initiative;
 	}
 
 	public void decreaseHealth(int amount){
 		health -= amount;
 	}
+
+	public abstract ArrayList<Pair<Integer, Integer>> getAttacks();
 }
