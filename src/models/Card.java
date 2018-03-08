@@ -1,5 +1,9 @@
 package models;
 
+import java.util.ArrayList;
+import java.lang.Integer;
+
+
 /**
  * Abstract class of a card.
  */
@@ -7,33 +11,33 @@ public abstract class Card {
 	/**
 	 * A type of a card. Must be one of: "Soldier", "MachineGun", "Berserker", "Sniper" or "Battle".
 	 */
-	private String cardType;
+	protected String cardType;
 	/**
 	 * Vertical position of the card on a board.
 	 */
-	private int posX;
+	protected int posX;
 	/**
 	 * Horizontal position of the card on a board.
 	 */
-	private int posY;
+	protected int posY;
 	/**
 	 * Direction that the card is facing. Must be one of: "N" - north (up), "W" - west (right), "S" - south (down), "E" - east (left)
 	 */
-	private char faces;
+	protected char faces;
 	/**
 	 * Health points of a card;
 	 */
-	private int health;
+	protected int health;
 	/**
 	 * Damage points of a card;
 	 */
-	private int damage;
+	protected int damage;
 	/**
 	 * Initiative points of a card;
 	 */
-	private int initiative;
+	protected int initiative;
 	
-	private User owner;
+	protected User owner;
 
 	public User getOwner() {
 		return owner;
@@ -43,12 +47,7 @@ public abstract class Card {
 		this.owner = owner;
 	}
 	
-
 	public Card(){}
-
-	public Card(String cardType){
-		this.cardType = cardType;
-	}
 
 	public Card(String cardType, int posX, int posY, char faces, int health, int damage, int initiative){
 		this.cardType = cardType;
@@ -108,11 +107,13 @@ public abstract class Card {
 		return initiative;
 	}
 
-	public void setInitiative(int initiative) {
+	public void setIniiative(int initiative) {
 		this.initiative = initiative;
 	}
 
 	public void decreaseHealth(int amount){
 		health -= amount;
 	}
+
+	public abstract ArrayList<Pair<Integer, Integer>> getAttacks();
 }
