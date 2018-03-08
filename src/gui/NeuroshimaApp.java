@@ -48,6 +48,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener {
 		frame.setLocationRelativeTo(null);
 		frame.setTitle("Neuroshima");
 		frame.getContentPane().setLayout(null);
+		frame.setContentPane(new JLabel(new ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
 
 		JPanel panelGameMain = new JPanel();
 		panelGameMain.setBorder(BorderFactory.createTitledBorder("Game board"));
