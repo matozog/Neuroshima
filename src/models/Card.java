@@ -32,8 +32,7 @@ public abstract class Card {
 	 * Initiative points of a card;
 	 */
 	private int initiative;
-	// TODO: Uncomment after User class is implemented.
-	/*
+	
 	private User owner;
 
 	public User getOwner() {
@@ -43,7 +42,7 @@ public abstract class Card {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	*/
+	
 
 	public Card(){}
 
