@@ -171,7 +171,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		{
 			if(listModel.getSize()==4)
 			{
-				JOptionPane.showMessageDialog(this, "Too many player! (max. 4 players)", "Waring", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Too many players! (max. 4 players)", "Waring", JOptionPane.WARNING_MESSAGE);
 			}
 			else {
 				addUserToGame();
@@ -189,7 +189,7 @@ public class LogWindow extends JFrame implements ActionListener {
 			{
 				for(User user: players.playersList)
 				{
-					if((user.getId() + "." +user.getName()).equals(listModel.getElementAt(i)))
+					if(user.getName().equals(listModel.getElementAt(i)))
 						usersList.add(user);
 				}
 			}
@@ -219,6 +219,7 @@ public class LogWindow extends JFrame implements ActionListener {
 	 */
 	public void addUserToGame()
 	{
+		boolean isOnList=false;
 		if(txtPlayerName.getText().length()!=0)
 		{
 			for(User user: players.playersList)
@@ -228,10 +229,21 @@ public class LogWindow extends JFrame implements ActionListener {
 					if(JOptionPane.showConfirmDialog(this, "This nick is used, would you like to play as this player?","Question",
 							JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
 					{
-						listModel.addElement(user.getId() + "." + user.getName());
-						txtPlayerName.setText("");
-						createUser= false;
-						break;
+						for(int i=0;i<listModel.size();i++)
+						{
+							if(user.getName().equals(listModel.getElementAt(i)))
+							{
+								isOnList=true;
+								break;
+							}
+						}
+						System.out.print(isOnList);
+						if(isOnList==false) {
+							listModel.addElement(user.getName());
+							txtPlayerName.setText("");
+							createUser= false;
+						}
+						else JOptionPane.showMessageDialog(this, "This user is on list!");
 					}
 					createUser= false;
 					txtPlayerName.setText("");
@@ -242,7 +254,7 @@ public class LogWindow extends JFrame implements ActionListener {
 			{
 				User user = new User(players.playersList.size()+1,txtPlayerName.getText(),0);
 				players.playersList.add(user);
-				listModel.addElement(user.getId() + "." + user.getName());
+				listModel.addElement(user.getName());
 				marshall();
 				txtPlayerName.setText("");
 			}

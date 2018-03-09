@@ -30,4 +30,16 @@
         <Rank>0</Rank>
         <Score>0</Score>
     </Player>
+    <Player>
+        <ID>6</ID>
+        <Name>Brokul</Name>
+        <Rank>0</Rank>
+        <Score>0</Score>
+    </Player>
+    <Player>
+        <ID>7</ID>
+        <Name>Grzechu</Name>
+        <Rank>0</Rank>
+        <Score>0</Score>
+    </Player>
 </Players>
