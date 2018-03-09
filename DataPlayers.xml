@@ -32,37 +32,13 @@
     </Player>
     <Player>
         <ID>6</ID>
-        <Name>Janek</Name>
+        <Name>Brokul</Name>
         <Rank>0</Rank>
         <Score>0</Score>
     </Player>
     <Player>
         <ID>7</ID>
-        <Name>Miki</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>8</ID>
-        <Name>Mikii</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>9</ID>
-        <Name>Krzychu</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>10</ID>
-        <Name>1</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>11</ID>
-        <Name>2</Name>
+        <Name>Grzechu</Name>
         <Rank>0</Rank>
         <Score>0</Score>
     </Player>
