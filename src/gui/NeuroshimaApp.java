@@ -55,8 +55,8 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		frame.setLocationRelativeTo(null);
 		frame.setTitle("Neuroshima");
 		frame.getContentPane().setLayout(null);
-		 frame.setContentPane(new JLabel(new
-		 ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
+//		 frame.setContentPane(new JLabel(new
+//		 ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
 
 		panelGameMain = new JPanel();
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -107,14 +107,22 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		mnAbout.addMenuListener(this);
 		menuBar.add(mnAbout);
 
-		logWindow = new LogWindow();
+		frame.setVisible(false);
+		logWindow = new LogWindow(this);
 		logWindow.setVisible(true);
 
-		GeneratePlayersPanels(4);
-		GenerateBoard();
-		GeneratePlayerCards();
-		SetPlayerScore(3, 100);
 
+	}
+	
+	public void ShowMainFrame() {
+		frame.setVisible(true);
+		
+
+		GeneratePlayersPanels(logWindow.getUsersList().size());
+		GenerateBoard();
+		GeneratePlayerCards(); 
+		
+		
 	}
 
 	/**
@@ -143,7 +151,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			playerPanel.setLayout(null);
 			playerPanel.add(scoreLabel);
 			playerPanel.setBounds(bounds[i]);
-			playerPanel.setBorder(BorderFactory.createTitledBorder("Player #" + (i + 1)));
+			playerPanel.setBorder(BorderFactory.createTitledBorder(logWindow.getUsersList().get(i).getName()));
 
 			try {
 				Image img1 = ImageIO.read(getClass().getResource("/gui/images/card" + (i + 1) + ".png"));
@@ -251,7 +259,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			public void run() {
 				try {
 					NeuroshimaApp window = new NeuroshimaApp();
-					window.frame.setVisible(true);
+//					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
