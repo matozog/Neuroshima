@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,8 +11,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Abstract class of a player.
  */
-@XmlRootElement (name="Player")
-@XmlAccessorType (XmlAccessType.FIELD)
+@XmlRootElement(name = "Player")
+@XmlAccessorType(XmlAccessType.FIELD)
 final public class User {
 	/**
 	 * An id of Player.
@@ -32,16 +33,19 @@ final public class User {
 	 * Sum of Player's points.
 	 */
 	@XmlElement(name = "Score")
-	private int score;	
+	private int score;
 	/**
 	 * Player's color on the board.
 	 */
-	private String color;	
+	private String color;
+
 	/**
 	 * Player's deck of Cards.
 	 */
+	private ArrayList<Card> userCards = new ArrayList<Card>();
 
-	public User() {};
+	public User() {
+	};
 
 	/**
 	 * @param id
@@ -62,7 +66,8 @@ final public class User {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -76,10 +81,44 @@ final public class User {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Removes card from deck
+	 * 
+	 * @param cardId
+	 */
+	public void RemoveCardFromDeck(int cardId) {
+		if (userCards.get(cardId) != null) {
+			userCards.remove(cardId);
+		}
+	}
+
+	public void GenerateRandomCard() {
+		if (userCards.size() < 3) {
+			Card card;
+			int rand = (int) (Math.random() * 10) % 3;
+			//0 - Berseker, 1 - MachineGun, 2-Soldier
+			switch (rand) {
+			case 0:
+				card = new Berserker();
+				userCards.add(card);
+				break;
+			case 1:
+				card = new MachineGun();
+				userCards.add(card);
+				break;
+			case 2:
+				card = new Soldier();
+				userCards.add(card);
+				break;
+			}
+		}
 	}
 
 	/**
@@ -90,19 +129,23 @@ final public class User {
 	}
 
 	/**
-	 * @param score the score to set
+	 * @param score
+	 *            the score to set
 	 */
 	public void setScore(int score) {
 		this.score = score;
 	}
+
 	/**
 	 * @return color
 	 */
 	public String getColor() {
 		return color;
 	}
+
 	/**
-	 * @param color the color to set
+	 * @param color
+	 *            the color to set
 	 */
 	public void setColor(String color) {
 		this.color = color;
@@ -112,7 +155,7 @@ final public class User {
 	 * Play card on board.
 	 */
 	public void attack(Card card, int posX, int posY) {
-		//TODO Add missing attributes 
+		// TODO Add missing attributes
 		card.setPosX(posX);
 		card.setPosY(posY);
 
@@ -122,6 +165,5 @@ final public class User {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", score=" + score + ", color=" + color + "]";
 	}
-
 
 }

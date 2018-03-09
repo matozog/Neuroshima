@@ -21,6 +21,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+
+import models.User;
+
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -28,6 +31,7 @@ import javax.swing.border.EtchedBorder;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.JButton;
 
 public class NeuroshimaApp implements ActionListener, MenuListener, MouseListener {
 
@@ -37,6 +41,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	private JMenu mnAbout;
 	private JMenu mnHelp;
 	private JPanel panelGameMain;
+	private JButton btnNextTurn;
 	private ArrayList<JPanel> playersPanels = new ArrayList<JPanel>();
 	private ArrayList<JLabel> playersLabel = new ArrayList<JLabel>();
 	private ArrayList<JLabel> boardCells = new ArrayList<JLabel>();
@@ -77,11 +82,15 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		panelNextTurn.add(lblNextTurn);
 
 		panelYourCards = new JPanel();
-		panelYourCards
-				.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelYourCards.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelYourCards.setBounds(305, 535, 424, 159);
 		frame.getContentPane().add(panelYourCards);
 		panelYourCards.setLayout(null);
+		
+		btnNextTurn = new JButton("Next Turn");
+		btnNextTurn.addActionListener(this);
+		btnNextTurn.setBounds(325, 11, 89, 23);
+		panelYourCards.add(btnNextTurn);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -177,27 +186,36 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	}
 
 	public void GeneratePlayerCards() {
-		Image img1 = null;
+		Image imgBerserker = null;
+		Image imgMachineGun = null;
+		Image imgSoldier = null;
 		try {
-			img1 = ImageIO.read(getClass().getResource("/gui/images/card1.png"));
+			imgBerserker = ImageIO.read(getClass().getResource("/gui/images/cardBerserker.png"));
+			imgMachineGun = ImageIO.read(getClass().getResource("/gui/images/cardMachineGun.png"));
+			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardSoldier.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+		for (int i = 0; i < logWindow.getUsersList().size(); i++) {
+			logWindow.getUsersList().get(i).GenerateRandomCard();
+		}
+		 
 		playerCard1 = new JLabel();
-		playerCard1.setIcon(logWindow.scaleImage(img1, 80, 130));
+		playerCard1.setIcon(logWindow.scaleImage(imgBerserker, 80, 130));
 		playerCard1.setBounds(8, 20, 80, 130);
 		playerCard1.addMouseListener(this);
 		panelYourCards.add(playerCard1);
 
+
 		playerCard2 = new JLabel();
-		playerCard2.setIcon(logWindow.scaleImage(img1, 80, 130));
+		playerCard2.setIcon(logWindow.scaleImage(imgBerserker, 80, 130));
 		playerCard2.setBounds(103, 20, 80, 130);
 		playerCard2.addMouseListener(this);
 		panelYourCards.add(playerCard2);
 
 		playerCard3 = new JLabel();
-		playerCard3.setIcon(logWindow.scaleImage(img1, 80, 130));
+		playerCard3.setIcon(logWindow.scaleImage(imgBerserker, 80, 130));
 		playerCard3.setBounds(198, 20, 80, 130);
 		playerCard3.addMouseListener(this);
 		panelYourCards.add(playerCard3);
