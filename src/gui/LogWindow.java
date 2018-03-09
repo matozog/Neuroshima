@@ -25,13 +25,16 @@ import models.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import java.awt.SystemColor;
 
 /*
  * Class to choice players and start game
@@ -40,12 +43,14 @@ public class LogWindow extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JPanel panelAction,panelPlayer,panelListPlayers;
-	private JButton btnPlay,btnShowRankPlayers,btnExit;
+	private JButton btnPlay,btnShowRankPlayers,btnExit,btnRemove;
 	private JTextField txtPlayerName;
 	private JList listOfPlayers;
+	private DefaultListModel listModel;
 	private JButton btnAdd;
 	private Players players;
 	private boolean createUser = true;
+	private ArrayList<User> usersList = new ArrayList<User>();
 
 	/**
 	 * 
@@ -86,6 +91,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		btnPlay = new JButton("Play");
 		btnPlay.setBounds(12, 23, 147, 53);
 		btnPlay.addActionListener(this);
+		btnPlay.setEnabled(false);
 		panelAction.add(btnPlay);
 		
 		btnShowRankPlayers = new JButton("Show rank players");
@@ -118,7 +124,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		btnAdd.setBorder(BorderFactory.createEmptyBorder());
 		btnAdd.setContentAreaFilled(false);
 		try {
-			Image img = ImageIO.read(getClass().getResource("/gui/images/add1.png"));
+			Image img = ImageIO.read(getClass().getResource("/gui/images/add.png"));
 			btnAdd.setIcon(scaleImage(img, btnAdd.getWidth(), btnAdd.getHeight()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -132,9 +138,27 @@ public class LogWindow extends JFrame implements ActionListener {
 		panelListPlayers.setBorder(BorderFactory.createTitledBorder("List of players"));
 		panelListPlayers.setLayout(null);
 		
-		listOfPlayers = new JList();
-		listOfPlayers.setBounds(12, 23, 243, 95);
+		listModel = new DefaultListModel();
+		listOfPlayers = new JList(listModel);
+		listOfPlayers.setBackground(SystemColor.menu);
+		listOfPlayers.setBounds(12, 23, 197, 95);
+		listOfPlayers.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		listOfPlayers.setLayoutOrientation(JList.VERTICAL_WRAP);
+		listOfPlayers.setVisibleRowCount(-1);
 		panelListPlayers.add(listOfPlayers);
+		
+		btnRemove = new JButton("");
+		btnRemove.setContentAreaFilled(false);
+		btnRemove.setBorder(BorderFactory.createEmptyBorder());
+		btnRemove.setBounds(221, 23, 35, 25);
+		try {
+			Image img_1 = ImageIO.read(getClass().getResource("/gui/images/remove.png"));
+			btnRemove.setIcon(scaleImage(img_1, btnAdd.getWidth(), btnAdd.getHeight()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		btnRemove.addActionListener(this);
+		panelListPlayers.add(btnRemove);
 		this.setLocationRelativeTo(null);
 		this.setTitle("Neuroshima");
 	}
@@ -145,37 +169,14 @@ public class LogWindow extends JFrame implements ActionListener {
 		
 		if(z == btnAdd)
 		{
-			if(txtPlayerName.getText().length()!=0)
+			if(listModel.getSize()==4)
 			{
-				for(User user: players.playersList)
-				{
-					if(txtPlayerName.getText().equals(user.getName()))
-					{
-						if(JOptionPane.showConfirmDialog(this, "This nick is used, would you like to play as this player?","Question",
-								JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
-						{
-							
-							//dodanie do listy graczy gotowych do gry
-							txtPlayerName.setText("");
-							createUser= false;
-							break;
-						}
-						createUser= false;
-						txtPlayerName.setText("");
-						break;
-					}
-				}
-				if(createUser)
-				{
-					User user = new User(players.playersList.size()+1,txtPlayerName.getText(),0);
-					players.playersList.add(user);
-					marshall();
-					txtPlayerName.setText("");
-				}
-				createUser = true;
+				JOptionPane.showMessageDialog(this, "Too many player! (max. 4 players)", "Waring", JOptionPane.WARNING_MESSAGE);
 			}
 			else {
-				JOptionPane.showMessageDialog(this, "Field with nickname is empty!");
+				addUserToGame();
+				if(listModel.getSize()>1) btnPlay.setEnabled(true);	
+				else btnPlay.setEnabled(false);
 			}
 		}
 		else if(z == btnExit)
@@ -184,11 +185,71 @@ public class LogWindow extends JFrame implements ActionListener {
 		}
 		else if(z == btnPlay)
 		{
+			for(int i=0; i<listModel.getSize();i++)
+			{
+				for(User user: players.playersList)
+				{
+					if((user.getId() + "." +user.getName()).equals(listModel.getElementAt(i)))
+						usersList.add(user);
+				}
+			}
+			for(int i=0; i<usersList.size();i++)
+			{
+				System.out.print(usersList.get(i).getName());
+			}
 			this.setVisible(false);
 		}
 		else if( z== btnShowRankPlayers)
 		{
 			
+		}
+		else if(z==btnRemove)
+		{
+			if(listModel.size()!=0 && listOfPlayers.getSelectedIndex()!=-1)
+			{
+				listModel.removeElementAt(listOfPlayers.getSelectedIndex());
+			}
+			else JOptionPane.showMessageDialog(this,"Empty list or do not choose player!" );
+			if(listModel.size()<2) btnPlay.setEnabled(false);
+		}
+	}
+	
+	/**
+	 * Function to add user
+	 */
+	public void addUserToGame()
+	{
+		if(txtPlayerName.getText().length()!=0)
+		{
+			for(User user: players.playersList)
+			{
+				if(txtPlayerName.getText().equals(user.getName()))
+				{
+					if(JOptionPane.showConfirmDialog(this, "This nick is used, would you like to play as this player?","Question",
+							JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
+					{
+						listModel.addElement(user.getId() + "." + user.getName());
+						txtPlayerName.setText("");
+						createUser= false;
+						break;
+					}
+					createUser= false;
+					txtPlayerName.setText("");
+					break;
+				}
+			}
+			if(createUser)
+			{
+				User user = new User(players.playersList.size()+1,txtPlayerName.getText(),0);
+				players.playersList.add(user);
+				listModel.addElement(user.getId() + "." + user.getName());
+				marshall();
+				txtPlayerName.setText("");
+			}
+			createUser = true;
+		}
+		else {
+			JOptionPane.showMessageDialog(this, "Field with nickname is empty!");
 		}
 	}
 	
@@ -202,11 +263,6 @@ public class LogWindow extends JFrame implements ActionListener {
 
 			Unmarshaller unmarsh = jabx.createUnmarshaller();
 			players = (Players) unmarsh.unmarshal(new File("DataPlayers.xml"));
-			if(players.playersList.size()!=0)
-			for(User u: players.playersList)
-			{
-				System.out.print(u.getName()+ " " + u.getId() + " " + u.getScore() + "\n");
-			}
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -245,6 +301,14 @@ public class LogWindow extends JFrame implements ActionListener {
 		Image scaleImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		ImageIcon imgIcon= new ImageIcon(scaleImg);
 		return imgIcon;
+	}
+	
+	/**
+	 * 
+	 * @return List of users who will play game
+	 */
+	public ArrayList<User> getUsersList() {
+		return usersList;
 	}
 	
 	/**
