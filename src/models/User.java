@@ -120,6 +120,10 @@ final public class User {
 			}
 		}
 	}
+	
+	public ArrayList<Card> GetUserCards(){
+		return userCards;
+	}
 
 	/**
 	 * @return the score

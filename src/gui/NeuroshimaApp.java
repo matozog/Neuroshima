@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import models.Card;
 import models.User;
 
 import javax.swing.JPanel;
@@ -45,10 +46,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	private ArrayList<JPanel> playersPanels = new ArrayList<JPanel>();
 	private ArrayList<JLabel> playersLabel = new ArrayList<JLabel>();
 	private ArrayList<JLabel> boardCells = new ArrayList<JLabel>();
+	private ArrayList<JLabel> currentPlayerCards = new ArrayList<JLabel>();
 	private JLabel lblNextTurn;
 	private JPanel panelNextTurn;
 	private JPanel panelYourCards;
 	private JLabel playerCard1, playerCard2, playerCard3, selectedPlayerCard = null;
+	private User currentPlayerTurn;
+	private int currentPlayerTurnId=0;
 
 	/**
 	 * Create the application.
@@ -90,6 +94,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		btnNextTurn = new JButton("Next Turn");
 		btnNextTurn.addActionListener(this);
 		btnNextTurn.setBounds(325, 11, 89, 23);
+		btnNextTurn.setEnabled(false);
 		panelYourCards.add(btnNextTurn);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -128,7 +133,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
 		GeneratePlayerCards();
-
+		GenerateCurrentPlayerCards();
 	}
 
 	/**
@@ -184,8 +189,8 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			frame.getContentPane().add(playerPanel);
 		}
 	}
-
-	public void GeneratePlayerCards() {
+	
+	public void GenerateCurrentPlayerCards() {
 		Image imgBerserker = null;
 		Image imgMachineGun = null;
 		Image imgSoldier = null;
@@ -196,29 +201,30 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		panelYourCards.removeAll();
+		int widthpos=8;
+		for(Card card : logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()) { 
+			playerCard1 = new JLabel();
+			playerCard1.setIcon(logWindow.scaleImage(imgBerserker, 80, 130));
+			playerCard1.setBounds(widthpos, 20, 80, 130);
+			playerCard1.addMouseListener(this);
+			currentPlayerCards.add(playerCard1);
+			panelYourCards.add(playerCard1); 
+			widthpos+=85;
+		} 
+	}
 
+	public void GeneratePlayerCards() {		 
+		currentPlayerTurn = logWindow.getUsersList().get(0); //default first player
+		currentPlayerTurnId = 0;
+		
 		for (int i = 0; i < logWindow.getUsersList().size(); i++) {
+			logWindow.getUsersList().get(i).GenerateRandomCard();
+			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 		}
 		 
-		playerCard1 = new JLabel();
-		playerCard1.setIcon(logWindow.scaleImage(imgBerserker, 80, 130));
-		playerCard1.setBounds(8, 20, 80, 130);
-		playerCard1.addMouseListener(this);
-		panelYourCards.add(playerCard1);
-
-
-		playerCard2 = new JLabel();
-		playerCard2.setIcon(logWindow.scaleImage(imgBerserker, 80, 130));
-		playerCard2.setBounds(103, 20, 80, 130);
-		playerCard2.addMouseListener(this);
-		panelYourCards.add(playerCard2);
-
-		playerCard3 = new JLabel();
-		playerCard3.setIcon(logWindow.scaleImage(imgBerserker, 80, 130));
-		playerCard3.setBounds(198, 20, 80, 130);
-		playerCard3.addMouseListener(this);
-		panelYourCards.add(playerCard3);
 	}
 
 	public void SetNextTurn(int player) {
@@ -265,6 +271,10 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		if (source == mntmExit) {
 			System.exit(0);
 		}
+		else if(source == btnNextTurn) {
+			GenerateCurrentPlayerCards();
+			btnNextTurn.setEnabled(false);
+		}
 	}
 
 	/**
@@ -309,36 +319,37 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Object source = e.getSource();
-		if (source == playerCard1) {
-			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			selectedPlayerCard = playerCard1;
-		} else if (source == playerCard2) {
-			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			selectedPlayerCard = playerCard2;
-		} else if (source == playerCard3) {
-			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			selectedPlayerCard = playerCard3;
+		if (source == currentPlayerCards.get(0)) {
+			currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			selectedPlayerCard = currentPlayerCards.get(0);
+		} else if (source == currentPlayerCards.get(1)) {
+			currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			selectedPlayerCard = currentPlayerCards.get(1);
+		} else if (source == currentPlayerCards.get(2)) {
+			currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			selectedPlayerCard = currentPlayerCards.get(2);
 		} else {
 			if (selectedPlayerCard == null) {
 				JOptionPane.showMessageDialog(null, "Select one card from \"Your cards\" panel");
 				return;
 			}
-			int i = 0;
-			for (JLabel cell : boardCells) {
-				if (source == cell) {
 
-					cell.setIcon(selectedPlayerCard.getIcon());
+			for (int i=0;i<boardCells.size();i++) {
+				if (source == boardCells.get(i)) {
+
+					boardCells.get(i).setIcon(selectedPlayerCard.getIcon());
 					selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+					selectedPlayerCard.setVisible(false);
 					selectedPlayerCard = null;
-					System.out.println(i);
+
+					btnNextTurn.setEnabled(true);
 				}
-				i++;
 			}
 		}
 	}
