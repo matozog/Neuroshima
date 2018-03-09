@@ -8,6 +8,12 @@ public class Field extends JLabel {
 	private boolean available=true;
 	private Card cardOnField=null;
 	
+	
+	public Field(int width, int height)
+	{
+		this.width = width;
+		this.height = height;
+	}
 	/**
 	 * 
 	 * @return available field
@@ -33,12 +39,4 @@ public class Field extends JLabel {
 	public void setCardOnField(Card cardOnField) {
 		this.cardOnField = cardOnField;
 	}
-
-	public Field(int width, int height)
-	{
-		this.width = width;
-		this.height = height;
-	}
-	
-	
 }

@@ -392,9 +392,10 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 							btnNextTurn.setEnabled(true);
 							cardDropped = true;
-						} else
-							JOptionPane.showMessageDialog(null, "Your turn passed!");
+						} 
 					}
+			else
+				JOptionPane.showMessageDialog(null, "Your turn passed!");
 		}
 
 	}
