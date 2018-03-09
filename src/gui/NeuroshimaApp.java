@@ -56,10 +56,12 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	private JPanel panelYourCards;
 	private JLabel playerCard1, playerCard2, playerCard3, selectedPlayerCard = null;
 	private User currentPlayerTurn;
-	private int currentPlayerTurnId=0;
+	private int currentPlayerTurnId = 0;
 	private Board board;
 	private boolean cardDropped = false;
-	private int selectedPlayerCardId = -1;	private int widthBoard = 4, heightBoard = 4;
+	private int selectedPlayerCardId = -1;
+	private int widthBoard = 4, heightBoard = 4;
+
 	/**
 	 * Create the application.
 	 */
@@ -93,11 +95,12 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		panelNextTurn.add(lblNextTurn);
 
 		panelYourCards = new JPanel();
-		panelYourCards.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelYourCards
+				.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelYourCards.setBounds(305, 519, 424, 204);
 		frame.getContentPane().add(panelYourCards);
 		panelYourCards.setLayout(null);
-		
+
 		btnNextTurn = new JButton("Next Turn");
 		btnNextTurn.addActionListener(this);
 		btnNextTurn.setBounds(105, 158, 224, 33);
@@ -135,7 +138,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	}
 
 	public void ShowMainFrame() {
-		
+
 		frame.setVisible(true);
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
@@ -196,7 +199,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			frame.getContentPane().add(playerPanel);
 		}
 	}
-	
+
 	public void GenerateCurrentPlayerCards() {
 		Image imgBerserker = null;
 		Image imgMachineGun = null;
@@ -209,48 +212,44 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		currentPlayerCards.clear();
-		for(Component component: panelYourCards.getComponents())
-		{
-			if(component instanceof JLabel)
-			{
+		for (Component component : panelYourCards.getComponents()) {
+			if (component instanceof JLabel) {
 				panelYourCards.remove(component);
 			}
 		}
-		int widthpos=22;
-		for(Card card : logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()) { 
-			playerCard1 = new JLabel(); 
-			if(card.getCardType().equals("Berserker")) {
+		int widthpos = 22;
+		for (Card card : logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()) {
+			playerCard1 = new JLabel();
+			if (card.getCardType().equals("Berserker")) {
 				currentCard = imgBerserker;
-			}
-			else if(card.getCardType().equals("MachineGun")) { 
+			} else if (card.getCardType().equals("MachineGun")) {
 				currentCard = imgMachineGun;
-			}
-			else if(card.getCardType().equals("Soldier")) { 
+			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
 			playerCard1.setBounds(widthpos, 20, 80, 130);
 			playerCard1.addMouseListener(this);
 			currentPlayerCards.add(playerCard1);
-			panelYourCards.add(playerCard1); 
-			widthpos+=150;
-		} 
+			panelYourCards.add(playerCard1);
+			widthpos += 150;
+		}
 		SetNextTurn(currentPlayerTurnId);
 		panelYourCards.repaint();
 	}
 
-	public void GeneratePlayerCards() {		 
-		currentPlayerTurn = logWindow.getUsersList().get(0); //default first player
+	public void GeneratePlayerCards() {
+		currentPlayerTurn = logWindow.getUsersList().get(0); // default first player
 		currentPlayerTurnId = 0;
-		
+
 		for (int i = 0; i < logWindow.getUsersList().size(); i++) {
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 		}
-		 
+
 	}
 
 	public void SetNextTurn(int player) {
@@ -296,10 +295,10 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		Object source = e.getSource();
 		if (source == mntmExit) {
 			System.exit(0);
-		}
-		else if(source == btnNextTurn) {
+		} else if (source == btnNextTurn) {
 			currentPlayerTurnId++;
-			if(currentPlayerTurnId==logWindow.getUsersList().size()) currentPlayerTurnId=0;
+			if (currentPlayerTurnId == logWindow.getUsersList().size())
+				currentPlayerTurnId = 0;
 			GenerateCurrentPlayerCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
@@ -347,7 +346,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+
 	}
 
 	@Override
@@ -377,27 +376,27 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				JOptionPane.showMessageDialog(null, "Select one card from \"Your cards\" panel");
 				return;
 			}
-			if(!cardDropped)
-			for(int i=0; i<board.getHeight();i++)
-				for (int j=0;j<board.getWidth();j++) {
-					if (source == board.getFieldOnBoard()[i][j]) {
+			if (!cardDropped)
+				for (int i = 0; i < board.getHeight(); i++)
+					for (int j = 0; j < board.getWidth(); j++) {
+						if (source == board.getFieldOnBoard()[i][j]) {
 
-						board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
-						selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-						selectedPlayerCard.setVisible(false);
-					
+							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
+							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+							selectedPlayerCard.setVisible(false);
 
-					logWindow.getUsersList().get(currentPlayerTurnId).RemoveCardFromDeck(selectedPlayerCardId);
-					logWindow.getUsersList().get(currentPlayerTurnId).GenerateRandomCard();
-					
-					selectedPlayerCard = null;
+							logWindow.getUsersList().get(currentPlayerTurnId).RemoveCardFromDeck(selectedPlayerCardId);
+							logWindow.getUsersList().get(currentPlayerTurnId).GenerateRandomCard();
 
-					btnNextTurn.setEnabled(true);
-					cardDropped = true;
-				}
-				else JOptionPane.showMessageDialog(null, "Your turn passed!");
+							selectedPlayerCard = null;
+
+							btnNextTurn.setEnabled(true);
+							cardDropped = true;
+						} else
+							JOptionPane.showMessageDialog(null, "Your turn passed!");
+					}
 		}
-		
+
 	}
 
 	@Override
@@ -415,6 +414,6 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
