@@ -51,6 +51,7 @@ public class LogWindow extends JFrame implements ActionListener {
 	private Players players;
 	private boolean createUser = true;
 	private ArrayList<User> usersList = new ArrayList<User>();
+	private NeuroshimaApp mainFrame;
 
 	/**
 	 * 
@@ -71,7 +72,8 @@ public class LogWindow extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public LogWindow() {
+	public LogWindow(NeuroshimaApp app) {
+		mainFrame = app;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 505, 290);
 		contentPane = new JPanel();
@@ -198,6 +200,7 @@ public class LogWindow extends JFrame implements ActionListener {
 				System.out.print(usersList.get(i).getName());
 			}
 			this.setVisible(false);
+			mainFrame.ShowMainFrame();
 		}
 		else if( z== btnShowRankPlayers)
 		{
@@ -326,16 +329,16 @@ public class LogWindow extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LogWindow frame = new LogWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					LogWindow frame = new LogWindow();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 }
