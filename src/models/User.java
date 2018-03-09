@@ -104,17 +104,18 @@ final public class User {
 			Card card;
 			int rand = (int) (Math.random() * 10) % 3;
 			//0 - Berseker, 1 - MachineGun, 2-Soldier
+			System.out.println(rand+" ");
 			switch (rand) {
 			case 0:
-				card = new Berserker();
+				card = new Berserker(-1, -1, 'N', 100, 10, 5);
 				userCards.add(card);
 				break;
 			case 1:
-				card = new MachineGun();
+				card = new MachineGun(-1, -1, 'N', 100, 10, 5);
 				userCards.add(card);
 				break;
 			case 2:
-				card = new Soldier();
+				card = new Soldier(-1, -1, 'N', 100, 10, 5);
 				userCards.add(card);
 				break;
 			}
