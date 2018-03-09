@@ -22,7 +22,9 @@ import javax.swing.JOptionPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import models.Board;
 import models.Card;
+import models.Field;
 import models.User;
 
 import javax.swing.JPanel;
@@ -55,9 +57,9 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	private JLabel playerCard1, playerCard2, playerCard3, selectedPlayerCard = null;
 	private User currentPlayerTurn;
 	private int currentPlayerTurnId=0;
+	private Board board;
 	private boolean cardDropped = false;
-	private int selectedPlayerCardId = -1;
-
+	private int selectedPlayerCardId = -1;	private int widthBoard = 4, heightBoard = 4;
 	/**
 	 * Create the application.
 	 */
@@ -70,6 +72,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		frame.setTitle("Neuroshima");
 		frame.getContentPane().setLayout(null);
 		frame.setContentPane(new JLabel(new ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
+		board = new Board(widthBoard, heightBoard);
 
 		panelGameMain = new JPanel();
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -132,8 +135,8 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	}
 
 	public void ShowMainFrame() {
+		
 		frame.setVisible(true);
-
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
 		GeneratePlayerCards();
@@ -266,12 +269,12 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				JLabel cell = new JLabel();
-				cell.setBounds(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
-				cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				cell.addMouseListener(this);
-				boardCells.add(cell);
-				panelGameMain.add(cell);
+				Field field = new Field(cellWidth, cellHeight);
+				field.setBounds(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+				field.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				field.addMouseListener(this);
+				board.getFieldOnBoard()[i][j] = field;
+				panelGameMain.add(field);
 			}
 		}
 	}
@@ -375,12 +378,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				return;
 			}
 			if(!cardDropped)
-			for (int i=0;i<boardCells.size();i++) {
-				if (source == boardCells.get(i)) {
+			for(int i=0; i<board.getHeight();i++)
+				for (int j=0;j<board.getWidth();j++) {
+					if (source == board.getFieldOnBoard()[i][j]) {
 
-					boardCells.get(i).setIcon(selectedPlayerCard.getIcon());
-					selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-					selectedPlayerCard.setVisible(false);
+						board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
+						selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+						selectedPlayerCard.setVisible(false);
 					
 
 					logWindow.getUsersList().get(currentPlayerTurnId).RemoveCardFromDeck(selectedPlayerCardId);
@@ -391,8 +395,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 					btnNextTurn.setEnabled(true);
 					cardDropped = true;
 				}
-			}
-			else JOptionPane.showMessageDialog(null, "Your turn passed!");
+				else JOptionPane.showMessageDialog(null, "Your turn passed!");
 		}
 		
 	}
