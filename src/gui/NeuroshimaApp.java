@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -42,7 +43,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	private JLabel lblNextTurn;
 	private JPanel panelNextTurn;
 	private JPanel panelYourCards;
-	private JLabel playerCard1, playerCard2, playerCard3;
+	private JLabel playerCard1, playerCard2, playerCard3, selectedPlayerCard = null;
 
 	/**
 	 * Create the application.
@@ -55,8 +56,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		frame.setLocationRelativeTo(null);
 		frame.setTitle("Neuroshima");
 		frame.getContentPane().setLayout(null);
-//		 frame.setContentPane(new JLabel(new
-//		 ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
+		frame.setContentPane(new JLabel(new ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
 
 		panelGameMain = new JPanel();
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -111,18 +111,15 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		logWindow = new LogWindow(this);
 		logWindow.setVisible(true);
 
-
 	}
-	
+
 	public void ShowMainFrame() {
 		frame.setVisible(true);
-		
 
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
-		GeneratePlayerCards(); 
-		
-		
+		GeneratePlayerCards();
+
 	}
 
 	/**
@@ -223,8 +220,9 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				JLabel cell = new JLabel();
-				cell.setBounds(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+				cell.setBounds(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
 				cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				cell.addMouseListener(this);
 				boardCells.add(cell);
 				panelGameMain.add(cell);
 			}
@@ -259,7 +257,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			public void run() {
 				try {
 					NeuroshimaApp window = new NeuroshimaApp();
-//					window.frame.setVisible(true);
+					// window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -293,38 +291,61 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Object source = e.getSource();
-		if(source == playerCard1) {
-			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED));
-		}		
-		else if(source == playerCard2) {
-			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED));
-		}		
-		else if(source == playerCard3) {
-			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED));
-		}		
+		if (source == playerCard1) {
+			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			selectedPlayerCard = playerCard1;
+		} else if (source == playerCard2) {
+			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			selectedPlayerCard = playerCard2;
+		} else if (source == playerCard3) {
+			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			selectedPlayerCard = playerCard3;
+		} else {
+			if (selectedPlayerCard == null) {
+				JOptionPane.showMessageDialog(null, "Select one card from \"Your cards\" panel");
+				return;
+			}
+			int i = 0;
+			for (JLabel cell : boardCells) {
+				if (source == cell) {
+
+					cell.setIcon(selectedPlayerCard.getIcon());
+					selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+					selectedPlayerCard = null;
+					System.out.println(i);
+				}
+				i++;
+			}
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
