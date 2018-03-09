@@ -5,18 +5,15 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import sun.rmi.runtime.Log;
-import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -25,12 +22,13 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-import java.awt.Color; 
+import java.awt.Color;
 import javax.swing.border.EtchedBorder;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 
-public class NeuroshimaApp implements ActionListener, MenuListener {
+public class NeuroshimaApp implements ActionListener, MenuListener, MouseListener {
 
 	private JFrame frame;
 	private LogWindow logWindow;
@@ -43,7 +41,8 @@ public class NeuroshimaApp implements ActionListener, MenuListener {
 	private ArrayList<JLabel> boardCells = new ArrayList<JLabel>();
 	private JLabel lblNextTurn;
 	private JPanel panelNextTurn;
-	
+	private JPanel panelYourCards;
+	private JLabel playerCard1, playerCard2, playerCard3;
 
 	/**
 	 * Create the application.
@@ -51,30 +50,38 @@ public class NeuroshimaApp implements ActionListener, MenuListener {
 	public NeuroshimaApp() {
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 1036, 600);
+		frame.setBounds(100, 100, 1042, 749);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setTitle("Neuroshima");
 		frame.getContentPane().setLayout(null);
-		frame.setContentPane(new JLabel(new ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
+		 frame.setContentPane(new JLabel(new
+		 ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
 
 		panelGameMain = new JPanel();
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelGameMain.setBounds(305, 62, 424, 412);
 		frame.getContentPane().add(panelGameMain);
 		panelGameMain.setLayout(null);
-		
+
 		panelNextTurn = new JPanel();
 		panelNextTurn.setBounds(305, 485, 424, 46);
 		panelNextTurn.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelNextTurn.setLayout(null);
 		frame.getContentPane().add(panelNextTurn);
-		
+
 		lblNextTurn = new JLabel("<html>Next turn: <b>Player1</b>");
 		lblNextTurn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNextTurn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNextTurn.setBounds(10, 11, 404, 24);
-		panelNextTurn.add(lblNextTurn); 
+		panelNextTurn.add(lblNextTurn);
+
+		panelYourCards = new JPanel();
+		panelYourCards
+				.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelYourCards.setBounds(305, 535, 424, 159);
+		frame.getContentPane().add(panelYourCards);
+		panelYourCards.setLayout(null);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -105,6 +112,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener {
 
 		GeneratePlayersPanels(4);
 		GenerateBoard();
+		GeneratePlayerCards();
 		SetPlayerScore(3, 100);
 
 	}
@@ -162,9 +170,36 @@ public class NeuroshimaApp implements ActionListener, MenuListener {
 			frame.getContentPane().add(playerPanel);
 		}
 	}
-	
-	public void SetNextTurn(int player) { 
-		lblNextTurn.setText("<html>Next turn: <b>Player"+player+"</b>");
+
+	public void GeneratePlayerCards() {
+		Image img1 = null;
+		try {
+			img1 = ImageIO.read(getClass().getResource("/gui/images/card1.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		playerCard1 = new JLabel();
+		playerCard1.setIcon(logWindow.scaleImage(img1, 80, 130));
+		playerCard1.setBounds(8, 20, 80, 130);
+		playerCard1.addMouseListener(this);
+		panelYourCards.add(playerCard1);
+
+		playerCard2 = new JLabel();
+		playerCard2.setIcon(logWindow.scaleImage(img1, 80, 130));
+		playerCard2.setBounds(103, 20, 80, 130);
+		playerCard2.addMouseListener(this);
+		panelYourCards.add(playerCard2);
+
+		playerCard3 = new JLabel();
+		playerCard3.setIcon(logWindow.scaleImage(img1, 80, 130));
+		playerCard3.setBounds(198, 20, 80, 130);
+		playerCard3.addMouseListener(this);
+		panelYourCards.add(playerCard3);
+	}
+
+	public void SetNextTurn(int player) {
+		lblNextTurn.setText("<html>Next turn: <b>Player" + player + "</b>");
 	}
 
 	/**
@@ -175,12 +210,12 @@ public class NeuroshimaApp implements ActionListener, MenuListener {
 		int height = panelGameMain.getHeight();
 
 		int cellWidth = width / 4;
-		int cellHeight = height / 4; 
+		int cellHeight = height / 4;
 
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				JLabel cell = new JLabel();
-				cell.setBounds(i*cellWidth,j*cellHeight,cellWidth,cellHeight);
+				cell.setBounds(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
 				cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				boardCells.add(cell);
 				panelGameMain.add(cell);
@@ -245,5 +280,43 @@ public class NeuroshimaApp implements ActionListener, MenuListener {
 	@Override
 	public void menuCanceled(MenuEvent e) {
 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object source = e.getSource();
+		if(source == playerCard1) {
+			playerCard1.setBorder(BorderFactory.createLineBorder(Color.RED));
+		}		
+		else if(source == playerCard2) {
+			playerCard2.setBorder(BorderFactory.createLineBorder(Color.RED));
+		}		
+		else if(source == playerCard3) {
+			playerCard3.setBorder(BorderFactory.createLineBorder(Color.RED));
+		}		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
