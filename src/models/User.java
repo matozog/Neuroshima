@@ -2,22 +2,37 @@ package models;
 
 import java.util.ArrayList;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Abstract class of a player.
  */
+@XmlRootElement (name="Player")
+@XmlAccessorType (XmlAccessType.FIELD)
 final public class User {
 	/**
 	 * An id of Player.
 	 */
+	@XmlElement(name = "ID")
 	private int id;
 	/**
 	 * A nickname of Player.
 	 */
+	@XmlElement(name = "Name")
 	private String name;
+	/**
+	 * Player ranking
+	 */
+	@XmlElement(name = "Rank")
+	private int rank;
 	/**
 	 * Sum of Player's points.
 	 */
-	private String score;	
+	@XmlElement(name = "Score")
+	private int score;	
 	/**
 	 * Player's color on the board.
 	 */
@@ -33,7 +48,7 @@ final public class User {
 	 * @param name
 	 * @param score
 	 */
-	public User(int id, String name, String score) {
+	public User(int id, String name, int score) {
 		this.id = id;
 		this.name = name;
 		this.score = score;
@@ -70,14 +85,14 @@ final public class User {
 	/**
 	 * @return the score
 	 */
-	public String getScore() {
+	public int getScore() {
 		return score;
 	}
 
 	/**
 	 * @param score the score to set
 	 */
-	public void setScore(String score) {
+	public void setScore(int score) {
 		this.score = score;
 	}
 	/**
