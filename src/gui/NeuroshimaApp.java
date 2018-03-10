@@ -379,8 +379,9 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			if (!cardDropped)
 				for (int i = 0; i < board.getHeight(); i++)
 					for (int j = 0; j < board.getWidth(); j++) {
-						if (source == board.getFieldOnBoard()[i][j]) {
-
+						if (source == board.getFieldOnBoard()[i][j] && board.getFieldOnBoard()[i][j].isAvailable()) {
+							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
+							board.getFieldOnBoard()[i][j].setAvailable(false);
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
