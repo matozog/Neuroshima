@@ -67,7 +67,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		public List<User> getPlayersList() {
 			return playersList;
 		}
-		
+
 	}
 	/**
 	 * Create the frame.
@@ -80,47 +80,47 @@ public class LogWindow extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		players = new Players();
 		unmarshal();
-		
+
 		panelAction = new JPanel();
 		panelAction.setBounds(12, 13, 171, 219);
 		contentPane.add(panelAction);
 		panelAction.setLayout(null);
 		panelAction.setBorder(BorderFactory.createTitledBorder("Menu"));
-		
+
 		btnPlay = new JButton("Play");
 		btnPlay.setBounds(12, 23, 147, 53);
 		btnPlay.addActionListener(this);
 		btnPlay.setEnabled(false);
 		panelAction.add(btnPlay);
-		
+
 		btnShowRankPlayers = new JButton("Show rank players");
 		btnShowRankPlayers.setBounds(12, 89, 147, 53);
 		btnShowRankPlayers.addActionListener(this);
 		panelAction.add(btnShowRankPlayers);
-		
+
 		btnExit = new JButton("Exit");
 		btnExit.setBounds(12, 155, 147, 51);
 		btnExit.addActionListener(this);
 		panelAction.add(btnExit);
-		
+
 		panelPlayer = new JPanel();
 		panelPlayer.setBounds(208, 13, 267, 75);
 		contentPane.add(panelPlayer);
 		panelPlayer.setBorder(BorderFactory.createTitledBorder("Player"));
 		panelPlayer.setLayout(null);
-		
+
 		txtPlayerName = new JTextField();
 		txtPlayerName.setBounds(92, 27, 116, 22);
 		panelPlayer.add(txtPlayerName);
 		txtPlayerName.setColumns(10);
-		
+
 		JLabel lblNickname = new JLabel("Nickname:");
 		lblNickname.setBounds(12, 30, 68, 16);
 		panelPlayer.add(lblNickname);
-		
+
 		btnAdd = new JButton("");
 		btnAdd.setBounds(220, 26, 35, 25);
 		btnAdd.setBorder(BorderFactory.createEmptyBorder());
@@ -133,13 +133,13 @@ public class LogWindow extends JFrame implements ActionListener {
 		}
 		btnAdd.addActionListener(this);
 		panelPlayer.add(btnAdd);
-		
+
 		panelListPlayers = new JPanel();
 		panelListPlayers.setBounds(208, 101, 267, 131);
 		contentPane.add(panelListPlayers);
 		panelListPlayers.setBorder(BorderFactory.createTitledBorder("List of players"));
 		panelListPlayers.setLayout(null);
-		
+
 		listModel = new DefaultListModel();
 		listOfPlayers = new JList(listModel);
 		listOfPlayers.setBackground(SystemColor.menu);
@@ -148,7 +148,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		listOfPlayers.setLayoutOrientation(JList.VERTICAL_WRAP);
 		listOfPlayers.setVisibleRowCount(-1);
 		panelListPlayers.add(listOfPlayers);
-		
+
 		btnRemove = new JButton("");
 		btnRemove.setContentAreaFilled(false);
 		btnRemove.setBorder(BorderFactory.createEmptyBorder());
@@ -164,11 +164,11 @@ public class LogWindow extends JFrame implements ActionListener {
 		this.setLocationRelativeTo(null);
 		this.setTitle("Neuroshima");
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object z = e.getSource();
-		
+
 		if(z == btnAdd)
 		{
 			if(listModel.getSize()==4)
@@ -204,7 +204,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		}
 		else if( z== btnShowRankPlayers)
 		{
-			
+
 		}
 		else if(z==btnRemove)
 		{
@@ -216,7 +216,7 @@ public class LogWindow extends JFrame implements ActionListener {
 			if(listModel.size()<2) btnPlay.setEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Function to add user
 	 */
@@ -267,7 +267,7 @@ public class LogWindow extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "Field with nickname is empty!");
 		}
 	}
-	
+
 	/**
 	 * Read from xml file to playersList
 	 */
@@ -277,24 +277,26 @@ public class LogWindow extends JFrame implements ActionListener {
 			JAXBContext jabx = JAXBContext.newInstance(Players.class);
 
 			Unmarshaller unmarsh = jabx.createUnmarshaller();
-			players = (Players) unmarsh.unmarshal(new File("DataPlayers.xml"));
+			File save = new File("DataPlayers.xml");
+			if(save.canExecute())
+				players = (Players) unmarsh.unmarshal(new File("DataPlayers.xml"));
 			
-			
+
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Save playersList to xml file
 	 * 
 	 */
 	public void marshall()
 	{
-	    try {
-	    	JAXBContext jaxbContext = JAXBContext.newInstance(Players.class);
-		    Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Players.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.marshal(players, new File("DataPlayers.xml"));
 		} catch (PropertyException e) {
@@ -305,7 +307,7 @@ public class LogWindow extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param img - image to scale
@@ -319,7 +321,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		ImageIcon imgIcon= new ImageIcon(scaleImg);
 		return imgIcon;
 	}
-	
+
 	/**
 	 * 
 	 * @return List of users who will play game
@@ -327,20 +329,20 @@ public class LogWindow extends JFrame implements ActionListener {
 	public ArrayList<User> getUsersList() {
 		return usersList;
 	}
-	
+
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					LogWindow frame = new LogWindow();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	//			public void run() {
+	//				try {
+	//					LogWindow frame = new LogWindow();
+	//					frame.setVisible(true);
+	//				} catch (Exception e) {
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		});
+	//	}
 }
