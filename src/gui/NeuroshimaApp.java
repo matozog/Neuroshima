@@ -459,7 +459,6 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				}
 			
 			}
-		}
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
 					if( maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
@@ -468,6 +467,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			}
 		}
 	}
+
 	private void battle() {
 		// TODO Auto-generated method stub
 		Field[][] copyField = board.getFieldOnBoard().clone();
