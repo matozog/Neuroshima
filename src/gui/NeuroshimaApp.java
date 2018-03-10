@@ -403,7 +403,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 							btnNextTurn.setEnabled(true);
 							cardDropped = true;
 							String attackString = "Attack";
-							if(attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType())); battleStart = true;
+							if(attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType())) battleStart = true;
 							if(battleStart) {
 								// shows message and calls battle start
 								JOptionPane.showMessageDialog(null, "The battle starts now");
