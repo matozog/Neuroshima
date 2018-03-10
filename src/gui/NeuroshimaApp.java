@@ -47,7 +47,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private LogWindow logWindow;
 	private JMenuItem mntmExit;
 	private JMenu mnAbout;
-	private JMenu mnHelp;
+	private JMenu mnOther;
 	private JPanel panelGameMain;
 	private JButton btnNextTurn;
 	private ArrayList<JPanel> playersPanels = new ArrayList<JPanel>();
@@ -66,6 +66,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private int selectedPlayerCardId = -1;
 	private int widthBoard = 4, heightBoard = 4;
 	private Deck deck;
+	private JMenuItem mnItemAbout, mnItemHelp,mnNewGame,mnReset;
 
 	/**
 	 * Create the application.
@@ -111,8 +112,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		panelNextTurn.add(lblNextTurn);
 
 		panelYourCards = new JPanel();
-		panelYourCards
-				.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelYourCards.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelYourCards.setBounds(305, 519, 424, 204);
 		frame.getContentPane().add(panelYourCards);
 		panelYourCards.setLayout(null);
@@ -133,21 +133,28 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		JMenu mnGame = new JMenu("Game");
 		menuBar.add(mnGame);
 
-		JMenuItem mntmNewGame = new JMenuItem("New game");
-		mnGame.add(mntmNewGame);
+		mnOther = new JMenu("Other");
+		menuBar.add(mnOther);
+		
+		mnNewGame = new JMenuItem("New game");
+		mnNewGame.addActionListener(this);
+		mnGame.add(mnNewGame);
 
-		JMenuItem mntmReset = new JMenuItem("Reset");
-		mnGame.add(mntmReset);
+		mnReset = new JMenuItem("Reset");
+		mnReset.addActionListener(this);
+		mnGame.add(mnReset);
 
+		mnItemHelp = new JMenuItem("Help");
+		mnItemHelp.addActionListener(this);
+		mnOther.add(mnItemHelp);
+		
+		mnItemAbout = new JMenuItem("About");
+		mnItemAbout.addActionListener(this);
+		mnOther.add(mnItemAbout);
+		
 		mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(this);
 		mnGame.add(mntmExit);
-
-		mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
-
-		mnAbout = new JMenu("About");
-		menuBar.add(mnAbout);
 
 		frame.setVisible(false);
 
@@ -319,13 +326,33 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		Object source = e.getSource();
 		if (source == mntmExit) {
 			System.exit(0);
-		} else if (source == btnNextTurn) {
+		}
+		else if (source == btnNextTurn) {
 			currentPlayerTurnId++;
 			if (currentPlayerTurnId == logWindow.getUsersList().size())
 				currentPlayerTurnId = 0;
 			GenerateCurrentPlayerCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
+		}
+		else if(source == mnItemAbout)
+		{
+			
+		}
+		else if( source ==  mnItemHelp)
+		{
+			
+
+		}
+		else if(source == mnNewGame)
+		{
+			
+
+		}
+		else if(source == mnReset)
+		{
+			
+
 		}
 	}
 
