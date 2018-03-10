@@ -10,6 +10,8 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -436,17 +438,35 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 	
 
-	private void battle() {
-		// TODO Auto-generated method stub
+	private void findMaximum() {
+		int maximumInitiative = board.getFieldOnBoard()[0][0].getCardOnField().getInitiative();
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
 				if(!board.getFieldOnBoard()[i][j].isAvailable()) {
-					//if(board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() > )
+					maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
 				}
-				
+			
 			}
 		}
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+					if( maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
+						maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+					}
+			}
+		}
+	}
+	private void battle() {
+		// TODO Auto-generated method stub
+		Field[][] copyField = board.getFieldOnBoard().clone();
+		//copyField.
 		
+		
+		
+		
+		
+		//copyField.sort(Comparator.comparing(Card::getInitiative()));
+
 		
 	}
 
