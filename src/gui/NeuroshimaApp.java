@@ -59,6 +59,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	private int currentPlayerTurnId = 0;
 	private Board board;
 	private boolean cardDropped = false;
+	private boolean battleStart = false;
 	private int selectedPlayerCardId = -1;
 	private int widthBoard = 4, heightBoard = 4;
 
@@ -383,6 +384,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
 							board.getFieldOnBoard()[i][j].setAvailable(false);
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
+							board.getFieldOnBoard()[i][j].setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
 
@@ -393,12 +395,35 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 							btnNextTurn.setEnabled(true);
 							cardDropped = true;
+							battleStart = true;
+							if(battleStart) {
+								// shows message and calls battle start
+								JOptionPane.showMessageDialog(null, "The battle starts now");
+								battle();
+								battleStart = false;
+							}
 						} 
 					}
 			else
 				JOptionPane.showMessageDialog(null, "Your turn passed!");
 		}
 
+	}
+
+	
+
+	private void battle() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+				if(!board.getFieldOnBoard()[i][j].isAvailable()) {
+					//if(board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() > )
+				}
+				
+			}
+		}
+		
+		
 	}
 
 	@Override
