@@ -83,13 +83,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		board = new Board(widthBoard, heightBoard);
 
 		panelGameMain = new JPanel();
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelGameMain.setBounds(305, 62, 424, 412);
-		panelGameMain.setBackground(new Color(0,0,0,125));
+		panelGameMain.setBackground(new Color(0, 0, 0, 125));
 		frame.getContentPane().add(panelGameMain);
 		panelGameMain.setLayout(null);
 
@@ -143,7 +143,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		menuBar.add(mnAbout);
 
 		frame.setVisible(false);
-		
+
 		logWindow.setVisible(true);
 
 	}
@@ -170,21 +170,22 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				new Rectangle(3, 353, playerPanelWidth, playerPanelHeight),
 				new Rectangle(733, 353, playerPanelWidth, playerPanelHeight) };
 		if (playersCount < 2 || playersCount > 4) {
-			JOptionPane.showMessageDialog(null, "Niepoprawna liczba graczy");
+			JOptionPane.showMessageDialog(null, "Invalid number of players!");
 			return;
 		}
 
 		for (int i = 0; i < playersCount; i++) {
 			JPanel playerPanel = new JPanel();
 			JLabel scoreLabel = new JLabel("Score: 0");
-
+			scoreLabel.setForeground(Color.white);
 			scoreLabel.setBounds(new Rectangle(8, 15, 100, 20));
 
 			playerPanel.setLayout(null);
+
 			playerPanel.add(scoreLabel);
 			playerPanel.setBounds(bounds[i]);
 			playerPanel.setBorder(BorderFactory.createTitledBorder(logWindow.getUsersList().get(i).getName()));
-
+			playerPanel.setBackground(new Color(0, 0, 0, 125));
 			try {
 				Image img1 = ImageIO.read(getClass().getResource("/gui/images/card" + (i + 1) + ".png"));
 				JLabel card1 = new JLabel();
@@ -221,7 +222,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			imgBerserker = ImageIO.read(getClass().getResource("/gui/images/cardBerserker2.png"));
 			imgMachineGun = ImageIO.read(getClass().getResource("/gui/images/cardMachineGun2.png"));
 			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardSoldier2.png"));
-			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardBattle.png"));
+			imgBattle = ImageIO.read(getClass().getResource("/gui/images/cardBattle.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -241,14 +242,14 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				currentCard = imgMachineGun;
 			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
-			}
-			else if (card.getCardType().equals("Battle")) {
+			} else if (card.getCardType().equals("Battle")) {
 				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
 			playerCard1.setBounds(widthpos, 20, 80, 130);
 			playerCard1.addMouseListener(this);
 			currentPlayerCards.add(playerCard1);
+			panelYourCards.setBackground(new Color(0, 0, 0, 125));
 			panelYourCards.add(playerCard1);
 			widthpos += 150;
 		}
@@ -409,7 +410,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 							btnNextTurn.setEnabled(true);
 							cardDropped = true;
-						} 
+						}
 					}
 			else
 				JOptionPane.showMessageDialog(null, "Your turn passed!");
