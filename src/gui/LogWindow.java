@@ -315,7 +315,7 @@ public class LogWindow extends JFrame implements ActionListener, ListSelectionLi
 		{
 			for(int i=0; i<modelChoicePlayer.size(); i++)
 			{
-				if(listAllPlayers.getSelectedValue().toString().equals(modelChoicePlayer.getElementAt(i).toString()))
+				if(listAllPlayers.getSelectedValue().toString().substring(2).equals(modelChoicePlayer.getElementAt(i).toString()))
 				{
 					isOnList=true;
 					break;
