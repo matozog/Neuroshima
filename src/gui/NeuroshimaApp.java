@@ -145,7 +145,6 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		mnAbout.addMenuListener(this);
 		menuBar.add(mnAbout);
 
-		
 		frame.setVisible(false);
 
 		logWindow.setVisible(true);
@@ -241,13 +240,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		int widthpos = 22;
 		for (Card card : logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()) {
 			playerCard1 = new JLabel();
-			if (card.getCardType().equals("Berserker")) { 
+			if (card.getCardType().equals("Berserker")) {
 				currentCard = imgBerserker;
-			} else if (card.getCardType().equals("MachineGun")) { 
+			} else if (card.getCardType().equals("MachineGun")) {
 				currentCard = imgMachineGun;
-			} else if (card.getCardType().equals("Soldier")) { 
+			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
-			} else if (card.getCardType().equals("Battle")) {
+			} else if (card.getCardType().equals("Attack")) {
 				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
@@ -270,7 +269,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
-		} 
+		}
 	}
 
 	public void SetNextTurn(int player) {
@@ -373,27 +372,36 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		Object source = e.getSource(); 
+		Object source = e.getSource();
 		boolean isCard1 = ((currentPlayerCards.size() >= 1) ? true : false);
 		boolean isCard2 = ((currentPlayerCards.size() >= 2) ? true : false);
 		boolean isCard3 = ((currentPlayerCards.size() >= 3) ? true : false);
-		
+
 		if (isCard1 && source == currentPlayerCards.get(0)) {
-			if(isCard1) currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			if(isCard2) currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard3) currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard1)
+				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if (isCard2)
+				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard3)
+				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			selectedPlayerCard = currentPlayerCards.get(0);
 			selectedPlayerCardId = 0;
 		} else if (isCard2 && source == currentPlayerCards.get(1)) {
-			if(isCard1)currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard2)currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			if(isCard3)currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard1)
+				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard2)
+				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if (isCard3)
+				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			selectedPlayerCard = currentPlayerCards.get(1);
 			selectedPlayerCardId = 1;
 		} else if (isCard3 && source == currentPlayerCards.get(2)) {
-			if(isCard1)currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard2)currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard3)currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if (isCard1)
+				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard2)
+				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard3)
+				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 			selectedPlayerCard = currentPlayerCards.get(2);
 			selectedPlayerCardId = 2;
 		} else {
@@ -401,55 +409,56 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				JOptionPane.showMessageDialog(null, "Select one card from \"Your cards\" panel");
 				return;
 			}
-			if (!cardDropped)
-				for (int i = 0; i < board.getHeight(); i++)
+			if (!cardDropped) {
+				for (int i = 0; i < board.getHeight(); i++) {
 					for (int j = 0; j < board.getWidth(); j++) {
 						if (source == board.getFieldOnBoard()[i][j] && board.getFieldOnBoard()[i][j].isAvailable()) {
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
 							board.getFieldOnBoard()[i][j].setAvailable(false);
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
-							board.getFieldOnBoard()[i][j].setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
+							board.getFieldOnBoard()[i][j].setCardOnField(logWindow.getUsersList()
+									.get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
 
 							logWindow.getUsersList().get(currentPlayerTurnId).RemoveCardFromUser(selectedPlayerCardId);
 							logWindow.getUsersList().get(currentPlayerTurnId).GenerateRandomCard();
-							
+
 							selectedPlayerCard = null;
 
 							btnNextTurn.setEnabled(true);
 							cardDropped = true;
-						} 
-							String attackString = "Attack";
-							if(attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType())) battleStart = true;
-							if(battleStart) {
-								// shows message and calls battle start
-								JOptionPane.showMessageDialog(null, "The battle starts now");
-								battle();
-								battleStart = false;
-							}
-						} 
+						String attackString = "Attack";
+						if (attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType()))
+							battleStart = true;
+						if (battleStart) {
+							// shows message and calls battle start
+							JOptionPane.showMessageDialog(null, "The battle starts now");
+							battle();
+							battleStart = false;
+						}
+						}
 					}
-			else
+				}
+			}
+			else {
 				JOptionPane.showMessageDialog(null, "Your turn passed!");
+			}
 		}
 
 	}
-
-	
 
 	private void battle() {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
-				if(!board.getFieldOnBoard()[i][j].isAvailable()) {
-					//if(board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() > )
+				if (!board.getFieldOnBoard()[i][j].isAvailable()) {
+					// if(board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() > )
 				}
-				
+
 			}
 		}
-		
-		
+
 	}
 
 	@Override
