@@ -12,7 +12,10 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -35,24 +38,26 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 /*
  * Class to choice players and start game
  */
-public class LogWindow extends JFrame implements ActionListener {
+public class LogWindow extends JFrame implements ActionListener, ListSelectionListener {
 
 	private JPanel contentPane;
-	private JPanel panelAction,panelPlayer,panelListPlayers;
+	private JPanel panelAction,panelPlayer,panelListPlayers,panelAllPlayers;
 	private JButton btnPlay,btnShowRankPlayers,btnExit,btnRemove;
 	private JTextField txtPlayerName;
-	private JList listOfPlayers;
-	private DefaultListModel listModel;
+	private JList listOfPlayers,listAllPlayers;
+	private DefaultListModel modelChoicePlayer, modelAllPlayers;
 	private JButton btnAdd;
 	private Players players;
 	private boolean createUser = true;
 	private ArrayList<User> usersList = new ArrayList<User>();
 	private NeuroshimaApp mainFrame;
-
+	private JScrollPane scrollAllPlayers;
 	/**
 	 * 
 	 * Inner class for players 
@@ -75,14 +80,13 @@ public class LogWindow extends JFrame implements ActionListener {
 	public LogWindow(NeuroshimaApp app) {
 		mainFrame = app;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 505, 290);
+		setBounds(100, 100, 677, 290);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		players = new Players();
-		unmarshal();
 		
 		panelAction = new JPanel();
 		panelAction.setBounds(12, 13, 171, 219);
@@ -107,13 +111,14 @@ public class LogWindow extends JFrame implements ActionListener {
 		panelAction.add(btnExit);
 		
 		panelPlayer = new JPanel();
-		panelPlayer.setBounds(208, 13, 267, 75);
+		panelPlayer.setBounds(208, 13, 226, 75);
 		contentPane.add(panelPlayer);
 		panelPlayer.setBorder(BorderFactory.createTitledBorder("Player"));
 		panelPlayer.setLayout(null);
 		
 		txtPlayerName = new JTextField();
 		txtPlayerName.setBounds(92, 27, 116, 22);
+		txtPlayerName.addActionListener(this);
 		panelPlayer.add(txtPlayerName);
 		txtPlayerName.setColumns(10);
 		
@@ -122,7 +127,7 @@ public class LogWindow extends JFrame implements ActionListener {
 		panelPlayer.add(lblNickname);
 		
 		btnAdd = new JButton("");
-		btnAdd.setBounds(220, 26, 35, 25);
+		btnAdd.setBounds(440, 38, 35, 25);
 		btnAdd.setBorder(BorderFactory.createEmptyBorder());
 		btnAdd.setContentAreaFilled(false);
 		try {
@@ -132,7 +137,7 @@ public class LogWindow extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		btnAdd.addActionListener(this);
-		panelPlayer.add(btnAdd);
+		contentPane.add(btnAdd);
 		
 		panelListPlayers = new JPanel();
 		panelListPlayers.setBounds(208, 101, 267, 131);
@@ -140,12 +145,12 @@ public class LogWindow extends JFrame implements ActionListener {
 		panelListPlayers.setBorder(BorderFactory.createTitledBorder("List of players"));
 		panelListPlayers.setLayout(null);
 		
-		listModel = new DefaultListModel();
-		listOfPlayers = new JList(listModel);
+		modelChoicePlayer = new DefaultListModel();
+		listOfPlayers = new JList(modelChoicePlayer);
 		listOfPlayers.setBackground(SystemColor.menu);
 		listOfPlayers.setBounds(12, 23, 197, 95);
 		listOfPlayers.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		listOfPlayers.setLayoutOrientation(JList.VERTICAL_WRAP);
+		listOfPlayers.setLayoutOrientation(JList.VERTICAL);
 		listOfPlayers.setVisibleRowCount(-1);
 		panelListPlayers.add(listOfPlayers);
 		
@@ -161,8 +166,37 @@ public class LogWindow extends JFrame implements ActionListener {
 		}
 		btnRemove.addActionListener(this);
 		panelListPlayers.add(btnRemove);
+		
+		panelAllPlayers = new JPanel();
+		panelAllPlayers.setBounds(487, 13, 160, 219);
+		panelAllPlayers.setBorder(BorderFactory.createTitledBorder("Available players"));
+		contentPane.add(panelAllPlayers);
+		
+		modelAllPlayers = new DefaultListModel();
+		listAllPlayers = new JList(modelAllPlayers);
+		listAllPlayers.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				Object z = e.getSource();
+				if(z==listAllPlayers)
+				{
+					txtPlayerName.setText("");
+				}
+			}
+		});
+		panelAllPlayers.setLayout(null);
+		listAllPlayers.setBackground(SystemColor.menu);
+		listAllPlayers.setBounds(12, 24, 136, 182);
+		listAllPlayers.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		listAllPlayers.setLayoutOrientation(JList.VERTICAL);
+		listAllPlayers.setVisibleRowCount(-1);
+		//scrollAllPlayers = new JScrollPane(listAllPlayers);
+		//scrollAllPlayers.setBounds(12, 207, 136, -184);
+		panelAllPlayers.add(listAllPlayers);
 		this.setLocationRelativeTo(null);
 		this.setTitle("Neuroshima");
+		
+		unmarshal();
 	}
 	
 	@Override
@@ -171,13 +205,13 @@ public class LogWindow extends JFrame implements ActionListener {
 		
 		if(z == btnAdd)
 		{
-			if(listModel.getSize()==4)
+			if(modelChoicePlayer.getSize()==4)
 			{
 				JOptionPane.showMessageDialog(this, "Too many players! (max. 4 players)", "Waring", JOptionPane.WARNING_MESSAGE);
 			}
 			else {
 				addUserToGame();
-				if(listModel.getSize()>1) btnPlay.setEnabled(true);	
+				if(modelChoicePlayer.getSize()>1) btnPlay.setEnabled(true);	
 				else btnPlay.setEnabled(false);
 			}
 		}
@@ -187,11 +221,11 @@ public class LogWindow extends JFrame implements ActionListener {
 		}
 		else if(z == btnPlay)
 		{
-			for(int i=0; i<listModel.getSize();i++)
+			for(int i=0; i<modelChoicePlayer.getSize();i++)
 			{
 				for(User user: players.playersList)
 				{
-					if(user.getName().equals(listModel.getElementAt(i)))
+					if(user.getName().equals(modelChoicePlayer.getElementAt(i)))
 						usersList.add(user);
 				}
 			}
@@ -208,13 +242,28 @@ public class LogWindow extends JFrame implements ActionListener {
 		}
 		else if(z==btnRemove)
 		{
-			if(listModel.size()!=0 && listOfPlayers.getSelectedIndex()!=-1)
+			if(modelChoicePlayer.size()!=0 && listOfPlayers.getSelectedIndex()!=-1)
 			{
-				listModel.removeElementAt(listOfPlayers.getSelectedIndex());
+				modelChoicePlayer.removeElementAt(listOfPlayers.getSelectedIndex());
 			}
 			else JOptionPane.showMessageDialog(this,"Empty list or do not choose player!" );
-			if(listModel.size()<2) btnPlay.setEnabled(false);
+			if(modelChoicePlayer.size()<2) btnPlay.setEnabled(false);
 		}
+		else if(z==txtPlayerName)
+		{
+			listAllPlayers.clearSelection();
+		}
+	}
+	
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		Object z = e.getSource();
+		
+		if(z== listAllPlayers)
+		{
+			System.out.print("LuL1");
+		}
+		
 	}
 	
 	/**
@@ -232,17 +281,16 @@ public class LogWindow extends JFrame implements ActionListener {
 					if(JOptionPane.showConfirmDialog(this, "This nick is used, would you like to play as this player?","Question",
 							JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
 					{
-						for(int i=0;i<listModel.size();i++)
+						for(int i=0;i<modelChoicePlayer.size();i++)
 						{
-							if(user.getName().equals(listModel.getElementAt(i)))
+							if(user.getName().equals(modelChoicePlayer.getElementAt(i)))
 							{
 								isOnList=true;
 								break;
 							}
 						}
-						System.out.print(isOnList);
 						if(isOnList==false) {
-							listModel.addElement(user.getName());
+							modelChoicePlayer.addElement(user.getName());
 							txtPlayerName.setText("");
 							createUser= false;
 						}
@@ -257,11 +305,28 @@ public class LogWindow extends JFrame implements ActionListener {
 			{
 				User user = new User(players.playersList.size()+1,txtPlayerName.getText(),0);
 				players.playersList.add(user);
-				listModel.addElement(user.getName());
+				modelChoicePlayer.addElement(user.getName());
 				marshall();
 				txtPlayerName.setText("");
 			}
 			createUser = true;
+		}
+		else if(listAllPlayers.getSelectedIndex()!=-1)
+		{
+			for(int i=0; i<modelChoicePlayer.size(); i++)
+			{
+				if(listAllPlayers.getSelectedValue().toString().equals(modelChoicePlayer.getElementAt(i).toString()))
+				{
+					isOnList=true;
+					break;
+				}
+			}
+			if(isOnList==false) 
+			{
+				modelChoicePlayer.addElement(listAllPlayers.getSelectedValue().toString().substring(2));
+				txtPlayerName.setText("");
+			}
+			else JOptionPane.showMessageDialog(this, "This user is on list!");
 		}
 		else {
 			JOptionPane.showMessageDialog(this, "Field with nickname is empty!");
@@ -278,7 +343,10 @@ public class LogWindow extends JFrame implements ActionListener {
 
 			Unmarshaller unmarsh = jabx.createUnmarshaller();
 			players = (Players) unmarsh.unmarshal(new File("DataPlayers.xml"));
-			
+			for(int i=0; i<players.playersList.size(); i++)
+			{
+				modelAllPlayers.addElement(i + "." + players.playersList.get(i).getName());
+			}
 			
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
@@ -327,20 +395,4 @@ public class LogWindow extends JFrame implements ActionListener {
 	public ArrayList<User> getUsersList() {
 		return usersList;
 	}
-	
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					LogWindow frame = new LogWindow();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 }
