@@ -39,7 +39,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
 
-public class NeuroshimaApp implements ActionListener, MenuListener, MouseListener {
+public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	private JFrame frame;
 	private LogWindow logWindow;
@@ -117,9 +117,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 		btnNextTurn = new JButton("Next Turn");
 		btnNextTurn.addActionListener(this);
-		btnNextTurn.setBounds(105, 158, 224, 33);
+		btnNextTurn.setBounds(263, 158, 149, 33);
 		btnNextTurn.setEnabled(false);
 		panelYourCards.add(btnNextTurn);
+		
+		JButton btnShowCards = new JButton("Show cards");
+		btnShowCards.setBounds(12, 158, 149, 33);
+		panelYourCards.add(btnShowCards);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -138,11 +142,9 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		mnGame.add(mntmExit);
 
 		mnHelp = new JMenu("Help");
-		mnHelp.addMenuListener(this);
 		menuBar.add(mnHelp);
 
-		mnAbout = new JMenu("About...");
-		mnAbout.addMenuListener(this);
+		mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
 
 		
@@ -340,30 +342,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			}
 		});
 	}
-
-	@Override
-	public void menuSelected(MenuEvent e) {
-		Object source = e.getSource();
-
-		if (source == mnHelp) {
-			JOptionPane.showMessageDialog(null, "Tu bêdzie pomoc, zasady itp");
-			mnHelp.setSelected(false);
-		} else if (source == mnAbout) {
-			JOptionPane.showMessageDialog(null, "Program wykonali:\n\n £ukasz x2 Miki Mati Krzychu");
-			mnAbout.setSelected(false);
-		}
-	}
-
-	@Override
-	public void menuDeselected(MenuEvent e) {
-
-	}
-
-	@Override
-	public void menuCanceled(MenuEvent e) {
-
-	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
@@ -376,7 +355,6 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		boolean isCard1 = ((currentPlayerCards.size() >= 1) ? true : false);
 		boolean isCard2 = ((currentPlayerCards.size() >= 2) ? true : false);
 		boolean isCard3 = ((currentPlayerCards.size() >= 3) ? true : false);
-		
 		if (isCard1 && source == currentPlayerCards.get(0)) {
 			if(isCard1) currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 			if(isCard2) currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
