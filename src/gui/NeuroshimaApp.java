@@ -10,6 +10,8 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -86,13 +88,13 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		board = new Board(widthBoard, heightBoard);
 
 		panelGameMain = new JPanel();
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelGameMain.setBounds(305, 62, 424, 412);
-		panelGameMain.setBackground(new Color(0,0,0,125));
+		panelGameMain.setBackground(new Color(0, 0, 0, 125));
 		frame.getContentPane().add(panelGameMain);
 		panelGameMain.setLayout(null);
 
@@ -147,9 +149,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
 
-		
 		frame.setVisible(false);
-		
+
 		logWindow.setVisible(true);
 
 	}
@@ -177,21 +178,22 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				new Rectangle(3, 353, playerPanelWidth, playerPanelHeight),
 				new Rectangle(733, 353, playerPanelWidth, playerPanelHeight) };
 		if (playersCount < 2 || playersCount > 4) {
-			JOptionPane.showMessageDialog(null, "Niepoprawna liczba graczy");
+			JOptionPane.showMessageDialog(null, "Invalid number of players!");
 			return;
 		}
 
 		for (int i = 0; i < playersCount; i++) {
 			JPanel playerPanel = new JPanel();
 			JLabel scoreLabel = new JLabel("Score: 0");
-
+			scoreLabel.setForeground(Color.white);
 			scoreLabel.setBounds(new Rectangle(8, 15, 100, 20));
 
 			playerPanel.setLayout(null);
+
 			playerPanel.add(scoreLabel);
 			playerPanel.setBounds(bounds[i]);
 			playerPanel.setBorder(BorderFactory.createTitledBorder(logWindow.getUsersList().get(i).getName()));
-
+			playerPanel.setBackground(new Color(0, 0, 0, 125));
 			try {
 				Image img1 = ImageIO.read(getClass().getResource("/gui/images/card" + (i + 1) + ".png"));
 				JLabel card1 = new JLabel();
@@ -228,7 +230,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			imgBerserker = ImageIO.read(getClass().getResource("/gui/images/cardBerserker2.png"));
 			imgMachineGun = ImageIO.read(getClass().getResource("/gui/images/cardMachineGun2.png"));
 			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardSoldier2.png"));
-			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardBattle.png"));
+			imgBattle = ImageIO.read(getClass().getResource("/gui/images/cardBattle.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -242,20 +244,20 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		int widthpos = 22;
 		for (Card card : logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()) {
 			playerCard1 = new JLabel();
-			if (card.getCardType().equals("Berserker")) { 
+			if (card.getCardType().equals("Berserker")) {
 				currentCard = imgBerserker;
-			} else if (card.getCardType().equals("MachineGun")) { 
+			} else if (card.getCardType().equals("MachineGun")) {
 				currentCard = imgMachineGun;
-			} else if (card.getCardType().equals("Soldier")) { 
+			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
-			}
-			else if (card.getCardType().equals("Battle")) {
+			} else if (card.getCardType().equals("Attack")) {
 				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
 			playerCard1.setBounds(widthpos, 20, 80, 130);
 			playerCard1.addMouseListener(this);
 			currentPlayerCards.add(playerCard1);
+			panelYourCards.setBackground(new Color(0, 0, 0, 125));
 			panelYourCards.add(playerCard1);
 			widthpos += 150;
 		}
@@ -271,7 +273,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
-		} 
+		}
 	}
 
 	public void SetNextTurn(int player) {
@@ -351,26 +353,35 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		Object source = e.getSource(); 
+		Object source = e.getSource();
 		boolean isCard1 = ((currentPlayerCards.size() >= 1) ? true : false);
 		boolean isCard2 = ((currentPlayerCards.size() >= 2) ? true : false);
 		boolean isCard3 = ((currentPlayerCards.size() >= 3) ? true : false);
-		if (isCard1 && source == currentPlayerCards.get(0)) {
-			if(isCard1) currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			if(isCard2) currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard3) currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+				if (isCard1 && source == currentPlayerCards.get(0)) {
+			if (isCard1)
+				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if (isCard2)
+				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard3)
+				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			selectedPlayerCard = currentPlayerCards.get(0);
 			selectedPlayerCardId = 0;
 		} else if (isCard2 && source == currentPlayerCards.get(1)) {
-			if(isCard1)currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard2)currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			if(isCard3)currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard1)
+				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard2)
+				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if (isCard3)
+				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			selectedPlayerCard = currentPlayerCards.get(1);
 			selectedPlayerCardId = 1;
 		} else if (isCard3 && source == currentPlayerCards.get(2)) {
-			if(isCard1)currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard2)currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			if(isCard3)currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if (isCard1)
+				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard2)
+				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if (isCard3)
+				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 			selectedPlayerCard = currentPlayerCards.get(2);
 			selectedPlayerCardId = 2;
 		} else {
@@ -378,53 +389,74 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				JOptionPane.showMessageDialog(null, "Select one card from \"Your cards\" panel");
 				return;
 			}
-			if (!cardDropped)
-				for (int i = 0; i < board.getHeight(); i++)
+			if (!cardDropped) {
+				for (int i = 0; i < board.getHeight(); i++) {
 					for (int j = 0; j < board.getWidth(); j++) {
 						if (source == board.getFieldOnBoard()[i][j] && board.getFieldOnBoard()[i][j].isAvailable()) {
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
 							board.getFieldOnBoard()[i][j].setAvailable(false);
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
-							board.getFieldOnBoard()[i][j].setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
+							board.getFieldOnBoard()[i][j].setCardOnField(logWindow.getUsersList()
+									.get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
 
 							logWindow.getUsersList().get(currentPlayerTurnId).RemoveCardFromUser(selectedPlayerCardId);
 							logWindow.getUsersList().get(currentPlayerTurnId).GenerateRandomCard();
-							
+
 							selectedPlayerCard = null;
 
 							btnNextTurn.setEnabled(true);
 							cardDropped = true;
-							String attackString = "Attack";
-							if(attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType())) battleStart = true;
-							if(battleStart) {
-								// shows message and calls battle start
-								JOptionPane.showMessageDialog(null, "The battle starts now");
-								battle();
-								battleStart = false;
-							}
-						} 
+						String attackString = "Attack";
+						if (attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType()))
+							battleStart = true;
+						if (battleStart) {
+							// shows message and calls battle start
+							JOptionPane.showMessageDialog(null, "The battle starts now");
+							battle();
+							battleStart = false;
+						}
+						}
 					}
-			else
+				}
+			}
+			else {
 				JOptionPane.showMessageDialog(null, "Your turn passed!");
+			}
 		}
 
 	}
 
-	
+	private void findMaximum() {
+		int maximumInitiative = board.getFieldOnBoard()[0][0].getCardOnField().getInitiative();
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+
+					maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+				}
+			
+			}
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+					if( maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
+						maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+					}
+			}
+		}
+	}
 
 	private void battle() {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < board.getHeight(); i++) {
-			for (int j = 0; j < board.getWidth(); j++) {
-				if(!board.getFieldOnBoard()[i][j].isAvailable()) {
-					//if(board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() > )
-				}
-				
-			}
-		}
+		Field[][] copyField = board.getFieldOnBoard().clone();
+		//copyField.
 		
+		
+		
+		
+		
+		//copyField.sort(Comparator.comparing(Card::getInitiative()));
+
 		
 	}
 

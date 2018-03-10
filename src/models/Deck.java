@@ -9,6 +9,7 @@ public class Deck {
 	private int countBerserkerCards = 10;
 	private int countMachineGunCards = 10;
 	private int countSoldierCards = 10;
+	private int countAtackCards = 50;
  
 	private int maxHPRange = 20;
 	private int maxDamageRange = 10;
@@ -18,6 +19,7 @@ public class Deck {
 		GenerateBerserkerDeck();
 		GenerateMachineGunDeck();
 		GenerateSoldierCardsDeck(); 
+		GenerateAtackCardsDeck();
 	}
 
 	/**
@@ -74,6 +76,15 @@ public class Deck {
 	private void GenerateSoldierCardsDeck() { 
 		for(int i=0;i<countSoldierCards;i++) {
 			cardDeck.add(new Soldier(-1, -1, GetRanedomFace(), GetRandomHP(), GetRandomDamage(), GetRandomInitiative())); 
+		}
+	}
+	
+	/**
+	 * Generate deck for Atack card. It will generate 'countAtackCards' cards
+	 */
+	private void GenerateAtackCardsDeck() { 
+		for(int i=0;i<countAtackCards;i++) {
+			cardDeck.add(new Attack(-1, -1, 'N', 0, 0, 0)); 
 		}
 	}
 
