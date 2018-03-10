@@ -67,18 +67,29 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	 */
 	public NeuroshimaApp() {
 		frame = new JFrame();
+		logWindow = new LogWindow(this);
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 1042, 795);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setTitle("Neuroshima");
 		frame.getContentPane().setLayout(null);
-		frame.setContentPane(new JLabel(new ImageIcon(getClass().getResource("/gui/images/grass_texture.jpg"))));
+		Image backgorund;
+		try {
+			backgorund = ImageIO.read(getClass().getResource("/gui/images/neuroshima-hex-board.png"));
+			logWindow.scaleImage(backgorund, 1042, 796);
+			frame.setContentPane(new JLabel(logWindow.scaleImage(backgorund, 1042, 796)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		board = new Board(widthBoard, heightBoard);
 
 		panelGameMain = new JPanel();
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelGameMain.setBounds(305, 62, 424, 412);
+		panelGameMain.setBackground(new Color(0,0,0,125));
 		frame.getContentPane().add(panelGameMain);
 		panelGameMain.setLayout(null);
 
@@ -132,7 +143,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		menuBar.add(mnAbout);
 
 		frame.setVisible(false);
-		logWindow = new LogWindow(this);
+		
 		logWindow.setVisible(true);
 
 	}
@@ -204,11 +215,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		Image imgBerserker = null;
 		Image imgMachineGun = null;
 		Image imgSoldier = null;
+		Image imgBattle = null;
 		Image currentCard = null;
 		try {
-			imgBerserker = ImageIO.read(getClass().getResource("/gui/images/cardBerserker.png"));
-			imgMachineGun = ImageIO.read(getClass().getResource("/gui/images/cardMachineGun.png"));
-			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardSoldier.png"));
+			imgBerserker = ImageIO.read(getClass().getResource("/gui/images/cardBerserker2.png"));
+			imgMachineGun = ImageIO.read(getClass().getResource("/gui/images/cardMachineGun2.png"));
+			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardSoldier2.png"));
+			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardBattle.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -228,6 +241,9 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				currentCard = imgMachineGun;
 			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
+			}
+			else if (card.getCardType().equals("Battle")) {
+				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
 			playerCard1.setBounds(widthpos, 20, 80, 130);
