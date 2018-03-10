@@ -278,6 +278,8 @@ public class LogWindow extends JFrame implements ActionListener {
 
 			Unmarshaller unmarsh = jabx.createUnmarshaller();
 			players = (Players) unmarsh.unmarshal(new File("DataPlayers.xml"));
+			
+			
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
