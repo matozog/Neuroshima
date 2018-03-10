@@ -6,9 +6,9 @@ import javax.swing.JOptionPane;
 
 public class Deck { 
 	static private ArrayList<Card> cardDeck = new ArrayList<Card>();
-	private int countBerserkerCards = 3;
-	private int countMachineGunCards = 3;
-	private int countSoldierCards = 3;
+	private int countBerserkerCards = 10;
+	private int countMachineGunCards = 10;
+	private int countSoldierCards = 10;
  
 	private int maxHPRange = 20;
 	private int maxDamageRange = 10;
