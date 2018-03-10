@@ -93,13 +93,7 @@ public class Deck {
 			return null;
 		}
 		int randCardId = ((int)(Math.random() * 100) % cardDeck.size()); 
-		String tmp="";
-		for(Card c:cardDeck) {
-			tmp+= c.getCardType() + "\n";
-		}
-		JOptionPane.showMessageDialog(null,tmp);
 		if(cardDeck.get(randCardId) != null) {
- 
 			return cardDeck.get(randCardId);
 		}
 		return null;
