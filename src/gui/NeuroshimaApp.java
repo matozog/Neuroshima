@@ -24,6 +24,7 @@ import javax.swing.event.MenuListener;
 
 import models.Board;
 import models.Card;
+import models.Deck;
 import models.Field;
 import models.User;
 
@@ -61,6 +62,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	private boolean cardDropped = false;
 	private int selectedPlayerCardId = -1;
 	private int widthBoard = 4, heightBoard = 4;
+	private Deck deck;
 
 	/**
 	 * Create the application.
@@ -131,6 +133,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		mnAbout.addMenuListener(this);
 		menuBar.add(mnAbout);
 
+		
 		frame.setVisible(false);
 		logWindow = new LogWindow(this);
 		logWindow.setVisible(true);
@@ -140,6 +143,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	public void ShowMainFrame() {
 
 		frame.setVisible(true);
+		deck = new Deck();
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
 		GeneratePlayerCards();
@@ -222,11 +226,11 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		int widthpos = 22;
 		for (Card card : logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()) {
 			playerCard1 = new JLabel();
-			if (card.getCardType().equals("Berserker")) {
+			if (card.getCardType().equals("Berserker")) { 
 				currentCard = imgBerserker;
-			} else if (card.getCardType().equals("MachineGun")) {
+			} else if (card.getCardType().equals("MachineGun")) { 
 				currentCard = imgMachineGun;
-			} else if (card.getCardType().equals("Soldier")) {
+			} else if (card.getCardType().equals("Soldier")) { 
 				currentCard = imgSoldier;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
@@ -248,8 +252,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
 			logWindow.getUsersList().get(i).GenerateRandomCard();
-		}
-
+		} 
 	}
 
 	public void SetNextTurn(int player) {
@@ -352,23 +355,27 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		Object source = e.getSource();
-		if (source == currentPlayerCards.get(0)) {
-			currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+		Object source = e.getSource(); 
+		boolean isCard1 = ((currentPlayerCards.size() >= 1) ? true : false);
+		boolean isCard2 = ((currentPlayerCards.size() >= 2) ? true : false);
+		boolean isCard3 = ((currentPlayerCards.size() >= 3) ? true : false);
+		
+		if (isCard1 && source == currentPlayerCards.get(0)) {
+			if(isCard1) currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if(isCard2) currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if(isCard3) currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			selectedPlayerCard = currentPlayerCards.get(0);
 			selectedPlayerCardId = 0;
-		} else if (source == currentPlayerCards.get(1)) {
-			currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-			currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+		} else if (isCard2 && source == currentPlayerCards.get(1)) {
+			if(isCard1)currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if(isCard2)currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+			if(isCard3)currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			selectedPlayerCard = currentPlayerCards.get(1);
 			selectedPlayerCardId = 1;
-		} else if (source == currentPlayerCards.get(2)) {
-			currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
-			currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+		} else if (isCard3 && source == currentPlayerCards.get(2)) {
+			if(isCard1)currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if(isCard2)currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
+			if(isCard3)currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 			selectedPlayerCard = currentPlayerCards.get(2);
 			selectedPlayerCardId = 2;
 		} else {
@@ -386,8 +393,9 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
 
-							logWindow.getUsersList().get(currentPlayerTurnId).RemoveCardFromDeck(selectedPlayerCardId);
+							logWindow.getUsersList().get(currentPlayerTurnId).RemoveCardFromUser(selectedPlayerCardId);
 							logWindow.getUsersList().get(currentPlayerTurnId).GenerateRandomCard();
+							
 
 							selectedPlayerCard = null;
 

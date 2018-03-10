@@ -93,31 +93,19 @@ final public class User {
 	 * 
 	 * @param cardId
 	 */
-	public void RemoveCardFromDeck(int cardId) {
-		if (userCards.get(cardId) != null) {
+	public void RemoveCardFromUser(int cardId) {
+		if (userCards.get(cardId) != null) { 
 			userCards.remove(cardId);
 		}
 	}
 
 	public void GenerateRandomCard() {
 		if (userCards.size() < 3) {
-			Card card;
-			int rand = (int) (Math.random() * 10) % 3;
-			//0 - Berseker, 1 - MachineGun, 2-Soldier
-			System.out.println(rand+" ");
-			switch (rand) {
-			case 0:
-				card = new Berserker(-1, -1, 'N', 100, 10, 5);
-				userCards.add(card);
-				break;
-			case 1:
-				card = new MachineGun(-1, -1, 'N', 100, 10, 5);
-				userCards.add(card);
-				break;
-			case 2:
-				card = new Soldier(-1, -1, 'N', 100, 10, 5);
-				userCards.add(card);
-				break;
+			Card c = Deck.GetRandomCard();
+			// Deck is empty
+			if(c != null) {
+				userCards.add(c);  
+				Deck.RemoveCardFromDeck(c); 
 			}
 		}
 	}
