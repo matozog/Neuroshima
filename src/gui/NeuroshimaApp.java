@@ -394,7 +394,6 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		else if(source == btnShowCards)
 		{
 			GenerateCurrentPlayerCards();
-			System.out.print("\n after generate current players cards "+panelYourCards.getComponentCount() + "\n");
 			btnShowCards.setEnabled(false);
 			//panelYourCards.repaint();
 		}
@@ -456,13 +455,10 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	private void clearPanelYourCards()
 	{
-		System.out.print(panelYourCards.getComponentCount());
 		for(int i=panelYourCards.getComponentCount()-1; i>=0;i--)
 		{
-			System.out.print("\n panel card before if " + panelYourCards.getComponentCount() + "\n");
 			if(panelYourCards.getComponent(i) instanceof JLabel)
-			{			
-				System.out.print(panelYourCards.getComponent(i) + " " +  i  + "\n");	
+			{				
 				panelYourCards.remove(i);
 			}
 		}
