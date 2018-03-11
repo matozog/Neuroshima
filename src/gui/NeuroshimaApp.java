@@ -46,6 +46,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private JFrame frame;
 	private LogWindow logWindow;
 	private JMenuItem mntmExit;
+	private JMenu mnAbout;
 	private JMenu mnOther;
 	private JPanel panelGameMain;
 	private JButton btnNextTurn;
@@ -65,7 +66,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private int selectedPlayerCardId = -1;
 	private int widthBoard = 4, heightBoard = 4;
 	private Deck deck;
-	private JMenuItem mnItemAbout, mnItemHelp,mnNewGame;
+	private JMenuItem mnItemAbout, mnItemHelp,mnNewGame,mnReset;
 
 	/**
 	 * Create the application.
@@ -138,6 +139,10 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		mnNewGame = new JMenuItem("New game");
 		mnNewGame.addActionListener(this);
 		mnGame.add(mnNewGame);
+
+		mnReset = new JMenuItem("Reset");
+		mnReset.addActionListener(this);
+		mnGame.add(mnReset);
 
 		mnItemHelp = new JMenuItem("Help");
 		mnItemHelp.addActionListener(this);
@@ -370,13 +375,12 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 		else if(source == mnNewGame)
 		{
-			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to start new game?","New game",
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)==0) {
-					logWindow = null;
-					frame.setVisible(false);
-					frame=null;
-					NeuroshimaApp window = new NeuroshimaApp();
-			}
+			
+
+		}
+		else if(source == mnReset)
+		{
+			
 
 		}
 	}
