@@ -75,7 +75,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private int selectedPlayerCardId = -1;
 	private int widthBoard = 4, heightBoard = 4;
 	private Deck deck;
-	private JMenuItem mnItemAbout, mnItemHelp,mnNewGame,mnReset;
+	private JMenuItem mnItemAbout, mnItemHelp,mnNewGame;
 
 	/**
 	 * Create the application.
@@ -148,10 +148,6 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		mnNewGame = new JMenuItem("New game");
 		mnNewGame.addActionListener(this);
 		mnGame.add(mnNewGame);
-
-		mnReset = new JMenuItem("Reset");
-		mnReset.addActionListener(this);
-		mnGame.add(mnReset);
 
 		mnItemHelp = new JMenuItem("Help");
 		mnItemHelp.addActionListener(this);
@@ -406,12 +402,18 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 		else if(source == mnNewGame)
 		{
-			
-
-		}
-		else if(source == mnReset)
-		{
-			
+			if(JOptionPane.showConfirmDialog(null, "This nick is used, would you like to play as this player?","Question",
+					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
+			{
+				for(User user:logWindow.getUsersList())
+				{
+					user.setScore(0);
+				}
+				logWindow =null;
+				frame.setVisible(false);
+				frame = null;
+				NeuroshimaApp window = new NeuroshimaApp();
+			}
 
 		}
 	}
