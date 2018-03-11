@@ -58,7 +58,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private JMenu mnAbout;
 	private JMenu mnOther;
 	private JPanel panelGameMain;
-	private JButton btnNextTurn;
+	private JButton btnNextTurn,btnShowCards;
 	private ArrayList<JPanel> playersPanels = new ArrayList<JPanel>();
 	private ArrayList<JLabel> playersLabel = new ArrayList<JLabel>();
 	private ArrayList<JLabel> boardCells = new ArrayList<JLabel>();
@@ -135,8 +135,9 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		btnNextTurn.setEnabled(false);
 		panelYourCards.add(btnNextTurn);
 
-		JButton btnShowCards = new JButton("Show cards");
+		btnShowCards = new JButton("Show cards");
 		btnShowCards.setBounds(12, 158, 149, 33);
+		btnShowCards.addActionListener(this);
 		panelYourCards.add(btnShowCards);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -175,7 +176,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
 		GeneratePlayerCards();
-		GenerateCurrentPlayerCards();
+		//GenerateCurrentPlayerCards();
 	}
 
 	/**
@@ -364,9 +365,15 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			currentPlayerTurnId++;
 			if (currentPlayerTurnId == logWindow.getUsersList().size())
 				currentPlayerTurnId = 0;
-			GenerateCurrentPlayerCards();
+			//GenerateCurrentPlayerCards();
+			clearPanelYourCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
+		}
+		else if(source == btnShowCards)
+		{
+			GenerateCurrentPlayerCards();
+			//panelYourCards.repaint();
 		}
 		else if(source == mnItemAbout)
 		{
@@ -424,6 +431,20 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 	}
 
+	private void clearPanelYourCards()
+	{
+		System.out.print(panelYourCards.getComponentCount());
+		for(int i=0; i < panelYourCards.getComponentCount();i++)
+		{
+			System.out.print(panelYourCards.getComponent(i).getName());
+			if(panelYourCards.getComponent(i) instanceof JLabel)
+			{
+				panelYourCards.remove(i);
+			}
+		}
+		panelYourCards.repaint();
+	}
+	
 	/**
 	 * Launch the application.
 	 */
