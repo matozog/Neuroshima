@@ -337,11 +337,40 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 		else if(source == mnItemAbout)
 		{
-			
+			JOptionPane.showMessageDialog(null, "Game rules\r\n" + 
+					"\r\n" + 
+					"\r\n" + 
+					"Game board has 16 squares (4x4).\r\n" + 
+					"Every player in their turn draw a card a must place it on the board.\r\n" +
+					"There are 4 types of cards:\r\n" +
+					"1. MachineGuy - this card attacks everybody in a straight line.\r\n"+
+					"2. Soldier - this card can attack only field in front of a card.\r\n"+
+					"3. Berserker - this card attacks everybody around.\r\n" +
+					"4. Battle - this card starts fight.\r\n" +
+					"If they draw a battle card then:\r\n" + 
+					"Battle:\r\n" + 
+					"Every card has its initiative (the higher the number the earlier card will attack)\r\n" + 
+					"card that is being attacked will have decreased its HP points by a DMG points of an attacking card\r\n" + 
+					"at the end of a initiative every card that has less than 0 HP points is removed from the board\r\n" + 
+					"player gets points for every card that their card will remove from the board (the amount of removed card's HP points)" +
+					"\r\n" +
+					"\r\n"+
+					"The player that reaches the best score (the player who eliminated the most cards) win the game\r\n");
 		}
 		else if( source ==  mnItemHelp)
 		{
-			
+			JOptionPane.showMessageDialog(null, "Help\r\n" + 
+		"\r\n" +
+		"\r\n" +
+		"Useful tips!\r\n" +
+		"- place your Soldier cards only in front of some other card, not in front of empty field, because this card attack target thats in front of him!\r\n" +
+		"- when you want to place a Berserker card, try to hit as many players arround as possible!\r\n" +
+		"- place your Machine Guy card in a straight line that contains as many enemy cards as possible\r\n" +
+		"- if the field is full of cards it will automacilly call for the Battle\r\n"+
+		"- when the game starts you've got 3 cards on your hand\r\n"+
+		"- you can only have 3 cards on your hand\r\n"+
+		"- you have to put on field one card in your turn\r\n"+
+		"- the player who eliminated the most cards int every battle win the game\r\n");
 
 		}
 		else if(source == mnNewGame)
