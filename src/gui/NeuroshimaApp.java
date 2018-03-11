@@ -92,7 +92,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		frame.getContentPane().setLayout(null);
 		Image backgorund;
 		try {
-			backgorund = ImageIO.read(getClass().getResource("/gui/images/neuroshima-hex-board.png"));
+			backgorund = ImageIO.read(getClass().getResource("/gui/images/board.png"));
 			logWindow.scaleImage(backgorund, 1042, 796);
 			frame.setContentPane(new JLabel(logWindow.scaleImage(backgorund, 1042, 796)));
 		} catch (IOException e) {
@@ -103,6 +103,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		board = new Board(widthBoard, heightBoard);
 
 		panelGameMain = new JPanel();
+		panelGameMain.setOpaque(false);
 		panelGameMain.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelGameMain.setBounds(305, 62, 424, 412);
 		panelGameMain.setBackground(new Color(0, 0, 0, 125));
@@ -122,7 +123,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		panelNextTurn.add(lblNextTurn);
 
 		panelYourCards = new JPanel();
-		panelYourCards.setBorder(new TitledBorder(null, "Your cards", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelYourCards.setOpaque(false);
+		panelYourCards.setBorder(new TitledBorder(null, "<html><font color=white>Your cards</font></html>", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelYourCards.setBounds(305, 519, 424, 204);
 		frame.getContentPane().add(panelYourCards);
 		panelYourCards.setLayout(null);
@@ -205,7 +207,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			playerPanel.setBounds(bounds[i]);
 			String title = "<html><font color=white>"+logWindow.getUsersList().get(i).getName()+"</font></html>";
 			playerPanel.setBorder(BorderFactory.createTitledBorder(title));
-			playerPanel.setBackground(new Color(0, 0, 0, 125));
+			playerPanel.setBackground(new Color(0, 0, 0, 200));
 			try {
 				Image img1 = ImageIO.read(getClass().getResource("/gui/images/card" + (i + 1) + ".png"));
 				JLabel card1 = new JLabel();
