@@ -257,6 +257,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				currentCard = imgMachineGun;
 			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
+			}
 			else if (card.getCardType().equals("Attack")) {				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
