@@ -177,6 +177,23 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		GenerateBoard();
 		GeneratePlayerCards();
 		lblNextTurn.setText("<html>Actual turn: <b>" + logWindow.getUsersList().get(0).getName() + "</b>");
+		for(int i=0; i<logWindow.getUsersList().size();i++)
+		{
+			switch(i) {
+			case 0:
+				logWindow.getUsersList().get(i).setColor(Color.ORANGE);
+				break;
+			case 1:
+				logWindow.getUsersList().get(i).setColor(Color.PINK);
+				break;
+			case 2:
+				logWindow.getUsersList().get(i).setColor(Color.GREEN);
+				break;
+			case 3:
+				logWindow.getUsersList().get(i).setColor(Color.BLUE);
+				break;
+			}
+		}
 		//GenerateCurrentPlayerCards();
 	}
 
@@ -537,13 +554,9 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 							field.setIcon(logWindow.scaleImage(iconToImage(selectedPlayerCard.getIcon()), 70, 100));
 							field.setAvailable(false);
-							// Center card
-//							Rectangle r = field.getBounds();
-//							r.setLocation(field.getX()+17, field.getY());
-//							r.setSize(r.width-17,r.height);
-//							field.setBounds(r);
 							field.setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()
 									.get(selectedPlayerCardId));
+							field.setColorField(logWindow.getUsersList().get(currentPlayerTurnId).getColor());
 
 							char dir = '-';
 							switch(field.getCardOnField().getFaces()) {
