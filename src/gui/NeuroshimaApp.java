@@ -76,7 +76,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private int selectedPlayerCardId = -1;
 	private int widthBoard = 4, heightBoard = 4;
 	private Deck deck;
-	private JMenuItem mnItemAbout, mnItemHelp,mnNewGame;
+	private JMenuItem mnItemAbout, mnItemHelp, mnNewGame;
 	private int maximumInitiative = 0;
 
 	/**
@@ -125,7 +125,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 		panelYourCards = new JPanel();
 		panelYourCards.setOpaque(false);
-		panelYourCards.setBorder(new TitledBorder(null, "<html><font color=white>Your cards</font></html>", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelYourCards.setBorder(new TitledBorder(null, "<html><font color=white>Your cards</font></html>",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelYourCards.setBounds(305, 519, 424, 204);
 		frame.getContentPane().add(panelYourCards);
 		panelYourCards.setLayout(null);
@@ -148,7 +149,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 		mnOther = new JMenu("Other");
 		menuBar.add(mnOther);
-		
+
 		mnNewGame = new JMenuItem("New game");
 		mnNewGame.addActionListener(this);
 		mnGame.add(mnNewGame);
@@ -156,11 +157,11 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		mnItemHelp = new JMenuItem("Help");
 		mnItemHelp.addActionListener(this);
 		mnOther.add(mnItemHelp);
-		
+
 		mnItemAbout = new JMenuItem("About");
 		mnItemAbout.addActionListener(this);
 		mnOther.add(mnItemAbout);
-		
+
 		mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(this);
 		mnGame.add(mntmExit);
@@ -206,7 +207,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 			playerPanel.add(scoreLabel);
 			playerPanel.setBounds(bounds[i]);
-			String title = "<html><font color=white>"+logWindow.getUsersList().get(i).getName()+"</font></html>";
+			String title = "<html><font color=white>" + logWindow.getUsersList().get(i).getName() + "</font></html>";
 			playerPanel.setBorder(BorderFactory.createTitledBorder(title));
 			playerPanel.setBackground(new Color(0, 0, 0, 200));
 			try {
@@ -273,11 +274,9 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			playerCard1.addMouseListener(this);
 			currentPlayerCards.add(playerCard1);
 			panelYourCards.setBackground(new Color(0, 0, 0, 125));
-			
-			
 
 			char dir = '-';
-			switch(card.getFaces()) {
+			switch (card.getFaces()) {
 			case 'N':
 				dir = '↑';
 				break;
@@ -290,15 +289,15 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			case 'S':
 				dir = '↓';
 				break;
-			} 
+			}
 
-			JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>"
-					+ "<font color=\"#00ff00\">+" + card.getHealth() + "</font><br/>"
-					+ "<font color=\"#ff0000\">-" + card.getDamage() + "</font>"); 
-			f.setBounds(85,5,50,50);
+			JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>" + "<font color=\"#00ff00\">+"
+					+ card.getHealth() + "</font><br/>" + "<font color=\"#ff0000\">-" + card.getDamage()
+					+ "</font><br/>" + "<font color=\"#00bfff\">" + card.getInitiative() + "</font>");
+			f.setBounds(85, 5, 50, 60);
 			f.setLayout(new FlowLayout());
 			playerCard1.add(f);
-			
+
 			panelYourCards.add(playerCard1);
 			widthpos += 140;
 		}
@@ -360,63 +359,46 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		Object source = e.getSource();
 		if (source == mntmExit) {
 			System.exit(0);
-		}
-		else if (source == btnNextTurn) {
+		} else if (source == btnNextTurn) {
 			currentPlayerTurnId++;
 			if (currentPlayerTurnId == logWindow.getUsersList().size())
 				currentPlayerTurnId = 0;
 			GenerateCurrentPlayerCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
-		}
-		else if(source == mnItemAbout)
-		{
-			JOptionPane.showMessageDialog(null, "Game rules\r\n" + 
-					"\r\n" + 
-					"\r\n" + 
-					"Game board has 16 squares (4x4).\r\n" + 
-					"Every player in their turn draw a card a must place it on the board.\r\n" +
-					"There are 4 types of cards:\r\n" +
-					"1. MachineGuy - this card attacks everybody in a straight line.\r\n"+
-					"2. Soldier - this card can attack only field in front of a card.\r\n"+
-					"3. Berserker - this card attacks everybody around.\r\n" +
-					"4. Battle - this card starts fight.\r\n" +
-					"If they draw a battle card then:\r\n" + 
-					"Battle:\r\n" + 
-					"Every card has its initiative (the higher the number the earlier card will attack)\r\n" + 
-					"card that is being attacked will have decreased its HP points by a DMG points of an attacking card\r\n" + 
-					"at the end of a initiative every card that has less than 0 HP points is removed from the board\r\n" + 
-					"player gets points for every card that their card will remove from the board (the amount of removed card's HP points)" +
-					"\r\n" +
-					"\r\n"+
-					"The player that reaches the best score (the player who eliminated the most cards) win the game\r\n");
-		}
-		else if( source ==  mnItemHelp)
-		{
-			JOptionPane.showMessageDialog(null, "Help\r\n" + 
-		"\r\n" +
-		"\r\n" +
-		"Useful tips!\r\n" +
-		"- place your Soldier cards only in front of some other card, not in front of empty field, because this card attack target thats in front of him!\r\n" +
-		"- when you want to place a Berserker card, try to hit as many players arround as possible!\r\n" +
-		"- place your Machine Guy card in a straight line that contains as many enemy cards as possible\r\n" +
-		"- if the field is full of cards it will automacilly call for the Battle\r\n"+
-		"- when the game starts you've got 3 cards on your hand\r\n"+
-		"- you can only have 3 cards on your hand\r\n"+
-		"- you have to put on field one card in your turn\r\n"+
-		"- the player who eliminated the most cards int every battle win the game\r\n");
+		} else if (source == mnItemAbout) {
+			JOptionPane.showMessageDialog(null, "Game rules\r\n" + "\r\n" + "\r\n"
+					+ "Game board has 16 squares (4x4).\r\n"
+					+ "Every player in their turn draw a card a must place it on the board.\r\n"
+					+ "There are 4 types of cards:\r\n"
+					+ "1. MachineGuy - this card attacks everybody in a straight line.\r\n"
+					+ "2. Soldier - this card can attack only field in front of a card.\r\n"
+					+ "3. Berserker - this card attacks everybody around.\r\n"
+					+ "4. Battle - this card starts fight.\r\n" + "If they draw a battle card then:\r\n" + "Battle:\r\n"
+					+ "Every card has its initiative (the higher the number the earlier card will attack)\r\n"
+					+ "card that is being attacked will have decreased its HP points by a DMG points of an attacking card\r\n"
+					+ "at the end of a initiative every card that has less than 0 HP points is removed from the board\r\n"
+					+ "player gets points for every card that their card will remove from the board (the amount of removed card's HP points)"
+					+ "\r\n" + "\r\n"
+					+ "The player that reaches the best score (the player who eliminated the most cards) win the game\r\n");
+		} else if (source == mnItemHelp) {
+			JOptionPane.showMessageDialog(null, "Help\r\n" + "\r\n" + "\r\n" + "Useful tips!\r\n"
+					+ "- place your Soldier cards only in front of some other card, not in front of empty field, because this card attack target thats in front of him!\r\n"
+					+ "- when you want to place a Berserker card, try to hit as many players arround as possible!\r\n"
+					+ "- place your Machine Guy card in a straight line that contains as many enemy cards as possible\r\n"
+					+ "- if the field is full of cards it will automacilly call for the Battle\r\n"
+					+ "- when the game starts you've got 3 cards on your hand\r\n"
+					+ "- you can only have 3 cards on your hand\r\n"
+					+ "- you have to put on field one card in your turn\r\n"
+					+ "- the player who eliminated the most cards int every battle win the game\r\n");
 
-		}
-		else if(source == mnNewGame)
-		{
-			if(JOptionPane.showConfirmDialog(null, "This nick is used, would you like to play as this player?","Question",
-					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
-			{
-				for(User user:logWindow.getUsersList())
-				{
+		} else if (source == mnNewGame) {
+			if (JOptionPane.showConfirmDialog(null, "This nick is used, would you like to play as this player?",
+					"Question", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
+				for (User user : logWindow.getUsersList()) {
 					user.setScore(0);
 				}
-				logWindow =null;
+				logWindow = null;
 				frame.setVisible(false);
 				frame = null;
 				NeuroshimaApp window = new NeuroshimaApp();
@@ -512,15 +494,15 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 							field.setIcon(logWindow.scaleImage(iconToImage(selectedPlayerCard.getIcon()), 70, 100));
 							field.setAvailable(false);
 							// Center card
-//							Rectangle r = field.getBounds();
-//							r.setLocation(field.getX()+17, field.getY());
-//							r.setSize(r.width-17,r.height);
-//							field.setBounds(r);
+							// Rectangle r = field.getBounds();
+							// r.setLocation(field.getX()+17, field.getY());
+							// r.setSize(r.width-17,r.height);
+							// field.setBounds(r);
 							field.setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()
 									.get(selectedPlayerCardId));
 
 							char dir = '-';
-							switch(field.getCardOnField().getFaces()) {
+							switch (field.getCardOnField().getFaces()) {
 							case 'N':
 								dir = '↑';
 								break;
@@ -537,8 +519,10 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 							JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>"
 									+ "<font color=\"#00ff00\">+" + field.getCardOnField().getHealth() + "</font><br/>"
-									+ "<font color=\"#ff0000\">-" + field.getCardOnField().getDamage() + "</font>"); 
-							f.setBounds(75,5,50,50);
+									+ "<font color=\"#ff0000\">-" + field.getCardOnField().getDamage() + "</font><br/>"
+									+ "<font color=\"#00bfff\">" + field.getCardOnField().getInitiative() + "</font>");
+
+							f.setBounds(75, 5, 50, 60);
 							f.setLayout(new FlowLayout());
 							field.add(f);
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
@@ -556,7 +540,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 								battleStart = true;
 							if (battleStart) {
 								// shows message and calls battle start
-								JOptionPane.showMessageDialog(null, "The battle starts now");
+								JOptionPane.showMessageDialog(null, "The battle starts now!");
 								battle();
 								battleStart = false;
 							}
@@ -573,40 +557,35 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private Field[][] checkStatusCard(Field[][] copyField) {
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
-				if(board.getFieldOnBoard()[i][j].getCardOnField().getHealth() <= 0) {
+				if (board.getFieldOnBoard()[i][j].getCardOnField().getHealth() <= 0) {
 					copyField[i][j].setAvailable(true);
 					copyField[i][j] = null;
-					
+
 				}
 			}
 		}
 		return copyField;
 	}
+
 	private void findMaximum() {
-		// declare first random maximymInitiative
-		int maximumInitiative = board.getFieldOnBoard()[0][0].getCardOnField().getInitiative();
-		// take maximymInitiative from field thats not empty
-		for (int i = 0; i < board.getHeight(); i++) {
-			for (int j = 0; j < board.getWidth(); j++) {
+		// declare first random maximumInitiative
 
-				maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
-				break;
-			}
-
-		}
 		// fin maximumInitiative of cards on board + remeber i/j indexes of this card
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
-				if (maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
-					maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+				if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
+					if (maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
+						maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+					}
 				}
 			}
 		}
 	}
 
 	private void battle() {
+		findMaximum();
 		// TODO Auto-generated method stub
-		ArrayList<Pair<Integer, Integer>> getAttacksResult= new ArrayList<>();
+		ArrayList<Pair<Integer, Integer>> getAttacksCoords = new ArrayList<>();
 		Field[][] copyField = new Field[board.getHeight()][board.getWidth()];
 		// = board.getFieldOnBoard().clone();
 		for (int i = 0; i < board.getHeight(); i++) {
@@ -619,15 +598,41 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			for (int i = 0; i < board.getHeight(); i++) {
 				for (int j = 0; j < board.getWidth(); j++) {
 					if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
-						//find this card and call getAttack
-						if (board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() == maximumInitiative) {
-							getAttacksResult = board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
-							
+						// find this card and call getAttack
+						if (board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() >= maximumInitiative) {
+							getAttacksCoords = board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
+							for (int k = 0; k < getAttacksCoords.size(); k++) {
+								int x = i + getAttacksCoords.get(k).getLeft();
+								int y = j + getAttacksCoords.get(k).getRight();
+								System.out.println("x =" + x);
+								System.out.println("y =" + y);
+								if (x < 0)
+									break;
+								if (y < 0)
+									break;
+								if (x > 0 && y > 0 && x < board.getHeight() && y < board.getWidth()
+										&& board.getFieldOnBoard()[x][y].isAvailable()) {
+									int hp = board.getFieldOnBoard()[x][y].getCardOnField().getHealth();
+									hp -= board.getFieldOnBoard()[i][j].getCardOnField().getDamage();
+									board.getFieldOnBoard()[x][y].getCardOnField().setHealth(hp);
+									if (hp <= 0) {
+										System.out.println("i =" + i);
+										System.out.println("j =" + j);
+										int points = board.getFieldOnBoard()[i][j].getCardOnField().getOwner()
+												.getScore();
+										points += board.getFieldOnBoard()[i][j].getCardOnField().getOwner().getScore();
+										board.getFieldOnBoard()[i][j].getCardOnField().getOwner().setScore(points);
+										copyField[i][j].setCardOnField(null);
+										copyField[i][j].setAvailable(true);
+									}
+								}
+							}
+
 						}
 					}
 				}
 			}
-			copyField = checkStatusCard(copyField);
+			// copyField = checkStatusCard(copyField);
 			maximumInitiative--;
 		}
 		for (int i = 0; i < board.getHeight(); i++) {
@@ -635,7 +640,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				board.getFieldOnBoard()[i][j] = copyField[i][j];
 			}
 		}
-		
+
 		// copyField.
 
 		// copyField.sort(Comparator.comparing(Card::getInitiative()));
