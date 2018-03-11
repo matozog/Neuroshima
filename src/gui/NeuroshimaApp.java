@@ -538,6 +538,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 							String attackString = "Attack";
 							if (attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType()))
 								battleStart = true;
+							// field.setAvailable(true);
 							if (battleStart) {
 								// shows message and calls battle start
 								JOptionPane.showMessageDialog(null, "The battle starts now!");
@@ -547,6 +548,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 						}
 					}
 				}
+
 			} else {
 				JOptionPane.showMessageDialog(null, "Your turn passed!");
 			}
@@ -557,10 +559,13 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private Field[][] checkStatusCard(Field[][] copyField) {
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
-				if (board.getFieldOnBoard()[i][j].getCardOnField().getHealth() <= 0) {
-					copyField[i][j].setAvailable(true);
-					copyField[i][j] = null;
-
+				if (board.getFieldOnBoard()[i][j] != null) {
+					if (!board.getFieldOnBoard()[i][j].isAvailable()) {
+						if (board.getFieldOnBoard()[i][j].getCardOnField().getHealth() <= 0) {
+							copyField[i][j].setAvailable(true);
+							copyField[i][j] = null;
+						}
+					}
 				}
 			}
 		}
@@ -573,9 +578,11 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		// fin maximumInitiative of cards on board + remeber i/j indexes of this card
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
-				if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
-					if (maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
-						maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+				if (board.getFieldOnBoard()[i][j] != null) {
+					if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
+						if (maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
+							maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+						}
 					}
 				}
 			}
@@ -584,6 +591,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	private void battle() {
 		findMaximum();
+		System.out.println("maximumInitiative =" + maximumInitiative);
 		// TODO Auto-generated method stub
 		ArrayList<Pair<Integer, Integer>> getAttacksCoords = new ArrayList<>();
 		Field[][] copyField = new Field[board.getHeight()][board.getWidth()];
@@ -593,46 +601,58 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				copyField[i][j] = board.getFieldOnBoard()[i][j];
 			}
 		}
-		while (maximumInitiative != 0) {
+		while (maximumInitiative > 0) {
 			// look for card with maximumInitiative
 			for (int i = 0; i < board.getHeight(); i++) {
 				for (int j = 0; j < board.getWidth(); j++) {
-					if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
-						// find this card and call getAttack
-						if (board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() >= maximumInitiative) {
-							getAttacksCoords = board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
-							for (int k = 0; k < getAttacksCoords.size(); k++) {
-								int x = i + getAttacksCoords.get(k).getLeft();
-								int y = j + getAttacksCoords.get(k).getRight();
-								System.out.println("x =" + x);
-								System.out.println("y =" + y);
-								if (x < 0)
-									break;
-								if (y < 0)
-									break;
-								if (x > 0 && y > 0 && x < board.getHeight() && y < board.getWidth()
-										&& board.getFieldOnBoard()[x][y].isAvailable()) {
-									int hp = board.getFieldOnBoard()[x][y].getCardOnField().getHealth();
-									hp -= board.getFieldOnBoard()[i][j].getCardOnField().getDamage();
-									board.getFieldOnBoard()[x][y].getCardOnField().setHealth(hp);
-									if (hp <= 0) {
-										System.out.println("i =" + i);
-										System.out.println("j =" + j);
-										int points = board.getFieldOnBoard()[i][j].getCardOnField().getOwner()
-												.getScore();
-										points += board.getFieldOnBoard()[i][j].getCardOnField().getOwner().getScore();
-										board.getFieldOnBoard()[i][j].getCardOnField().getOwner().setScore(points);
-										copyField[i][j].setCardOnField(null);
-										copyField[i][j].setAvailable(true);
+					if (board.getFieldOnBoard()[i][j] != null) {
+						if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
+							// find this card and call getAttack
+							if (board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() == maximumInitiative) {
+								getAttacksCoords = board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
+								System.out.println("getAttacksCoords =" + getAttacksCoords.toString());
+								for (int k = 0; k < getAttacksCoords.size(); k++) {
+									int x = i + getAttacksCoords.get(k).getLeft();
+									int y = j + getAttacksCoords.get(k).getRight();
+									System.out.println("x =" + x);
+									System.out.println("y =" + y);
+
+									if (x < 0)
+										break;
+									if (y < 0)
+										break;
+									if (x >= 0 && y >= 0 && x < board.getHeight() && y < board.getWidth()
+											&& board.getFieldOnBoard()[x][y] != null
+											&& !board.getFieldOnBoard()[x][y].isAvailable()) {
+										int hp = board.getFieldOnBoard()[x][y].getCardOnField().getHealth();
+										hp -= board.getFieldOnBoard()[i][j].getCardOnField().getDamage();
+										board.getFieldOnBoard()[x][y].getCardOnField().setHealth(hp);
+
+										if (hp <= 0
+												&& !"Attack".equals(
+														board.getFieldOnBoard()[x][y].getCardOnField().getCardType())
+												&& !board.getFieldOnBoard()[x][y].isAvailable()) {
+											System.out.println("i =" + i);
+											System.out.println("j =" + j);
+
+											// int points = board.getFieldOnBoard()[x][y].getCardOnField().getOwner()
+											// .getScore();
+											// += board.getFieldOnBoard()[x][y].getCardOnField().getOwner().getScore();
+											// board.getFieldOnBoard()[x][y].getCardOnField().getOwner().setScore(points);
+											// copyField[x][y].setCardOnField(null);
+											copyField[x][y].setAvailable(true);
+										}
 									}
 								}
-							}
 
+							}
 						}
 					}
+
 				}
 			}
-			// copyField = checkStatusCard(copyField);
+			copyField = checkStatusCard(copyField);
+
 			maximumInitiative--;
 		}
 		for (int i = 0; i < board.getHeight(); i++) {
