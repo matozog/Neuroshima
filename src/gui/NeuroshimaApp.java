@@ -261,12 +261,36 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
-			playerCard1.setBounds(widthpos, 20, 80, 130);
+			playerCard1.setBounds(widthpos, 20, 110, 130);
 			playerCard1.addMouseListener(this);
 			currentPlayerCards.add(playerCard1);
 			panelYourCards.setBackground(new Color(0, 0, 0, 125));
+			
+			char dir = '-';
+			switch(card.getFaces()) {
+			case 'N':
+				dir = '↑';
+				break;
+			case 'E':
+				dir = '→';
+				break;
+			case 'W':
+				dir = '←';
+				break;
+			case 'S':
+				dir = '↓';
+				break;
+			}
+
+			JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>"
+					+ "<font color=\"#00ff00\">+" + card.getHealth() + "</font><br/>"
+					+ "<font color=\"#ff0000\">-" + card.getDamage() + "</font>"); 
+			f.setBounds(85,5,50,50);
+			f.setLayout(new FlowLayout());
+			playerCard1.add(f);
+			
 			panelYourCards.add(playerCard1);
-			widthpos += 150;
+			widthpos += 140;
 		}
 		SetNextTurn(currentPlayerTurnId);
 		panelYourCards.repaint();
@@ -444,7 +468,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 								dir = '↓';
 								break;
 							}
-							
+
 							JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>"
 									+ "<font color=\"#00ff00\">+" + field.getCardOnField().getHealth() + "</font><br/>"
 									+ "<font color=\"#ff0000\">-" + field.getCardOnField().getDamage() + "</font>"); 
