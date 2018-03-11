@@ -1,5 +1,8 @@
 package models;
 
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 public class Field extends JLabel {
@@ -38,5 +41,10 @@ public class Field extends JLabel {
 
 	public void setCardOnField(Card cardOnField) {
 		this.cardOnField = cardOnField;
+	}
+	
+	public void setColorField(Color color)
+	{
+		this.setBorder(BorderFactory.createLineBorder(color, 3));
 	}
 }

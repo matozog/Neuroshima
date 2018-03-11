@@ -229,10 +229,6 @@ public class LogWindow extends JFrame implements ActionListener, ListSelectionLi
 						usersList.add(user);
 				}
 			}
-			for(int i=0; i<usersList.size();i++)
-			{
-				System.out.print(usersList.get(i).getName());
-			}
 			this.setVisible(false);
 			mainFrame.ShowMainFrame();
 		}

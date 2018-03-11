@@ -59,7 +59,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private JMenu mnAbout;
 	private JMenu mnOther;
 	private JPanel panelGameMain;
-	private JButton btnNextTurn;
+	private JButton btnNextTurn,btnShowCards;
 	private ArrayList<JPanel> playersPanels = new ArrayList<JPanel>();
 	private ArrayList<JLabel> playersLabel = new ArrayList<JLabel>();
 	private ArrayList<JLabel> boardCells = new ArrayList<JLabel>();
@@ -117,7 +117,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		panelNextTurn.setLayout(null);
 		frame.getContentPane().add(panelNextTurn);
 
-		lblNextTurn = new JLabel("<html>Next turn: <b>Player1</b>");
+		lblNextTurn = new JLabel();
 		lblNextTurn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNextTurn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNextTurn.setBounds(12, 0, 404, 24);
@@ -136,8 +136,9 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		btnNextTurn.setEnabled(false);
 		panelYourCards.add(btnNextTurn);
 
-		JButton btnShowCards = new JButton("Show cards");
+		btnShowCards = new JButton("Show cards");
 		btnShowCards.setBounds(12, 158, 149, 33);
+		btnShowCards.addActionListener(this);
 		panelYourCards.add(btnShowCards);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -176,7 +177,25 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
 		GeneratePlayerCards();
-		GenerateCurrentPlayerCards();
+		lblNextTurn.setText("<html>Actual turn: <b>" + logWindow.getUsersList().get(0).getName() + "</b>");
+		for(int i=0; i<logWindow.getUsersList().size();i++)
+		{
+			switch(i) {
+			case 0:
+				logWindow.getUsersList().get(i).setColor(Color.ORANGE);
+				break;
+			case 1:
+				logWindow.getUsersList().get(i).setColor(Color.PINK);
+				break;
+			case 2:
+				logWindow.getUsersList().get(i).setColor(Color.GREEN);
+				break;
+			case 3:
+				logWindow.getUsersList().get(i).setColor(Color.BLUE);
+				break;
+			}
+		}
+		//GenerateCurrentPlayerCards();
 	}
 
 	/**
@@ -318,7 +337,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	}
 
 	public void SetNextTurn(int player) {
-		lblNextTurn.setText("<html>Next turn: <b>" + logWindow.getUsersList().get(player).getName() + "</b>");
+		lblNextTurn.setText("<html>Actual turn: <b>" + logWindow.getUsersList().get(player).getName() + "</b>");
 	}
 
 	/**
@@ -365,9 +384,19 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			currentPlayerTurnId++;
 			if (currentPlayerTurnId == logWindow.getUsersList().size())
 				currentPlayerTurnId = 0;
-			GenerateCurrentPlayerCards();
+			//GenerateCurrentPlayerCards();
+			SetNextTurn(currentPlayerTurnId);
+			clearPanelYourCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
+			btnShowCards.setEnabled(true);
+		}
+		else if(source == btnShowCards)
+		{
+			GenerateCurrentPlayerCards();
+			System.out.print("\n after generate current players cards "+panelYourCards.getComponentCount() + "\n");
+			btnShowCards.setEnabled(false);
+			//panelYourCards.repaint();
 		}
 		else if(source == mnItemAbout)
 		{
@@ -409,7 +438,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 		else if(source == mnNewGame)
 		{
-			if(JOptionPane.showConfirmDialog(null, "This nick is used, would you like to play as this player?","Question",
+			if(JOptionPane.showConfirmDialog(null, "Do you really want to start a new game? Changes will be lost?","Question",
 					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
 			{
 				for(User user:logWindow.getUsersList())
@@ -425,6 +454,21 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 	}
 
+	private void clearPanelYourCards()
+	{
+		System.out.print(panelYourCards.getComponentCount());
+		for(int i=panelYourCards.getComponentCount()-1; i>=0;i--)
+		{
+			System.out.print("\n panel card before if " + panelYourCards.getComponentCount() + "\n");
+			if(panelYourCards.getComponent(i) instanceof JLabel)
+			{			
+				System.out.print(panelYourCards.getComponent(i) + " " +  i  + "\n");	
+				panelYourCards.remove(i);
+			}
+		}
+		panelYourCards.repaint();
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -511,13 +555,9 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 							field.setIcon(logWindow.scaleImage(iconToImage(selectedPlayerCard.getIcon()), 70, 100));
 							field.setAvailable(false);
-							// Center card
-//							Rectangle r = field.getBounds();
-//							r.setLocation(field.getX()+17, field.getY());
-//							r.setSize(r.width-17,r.height);
-//							field.setBounds(r);
 							field.setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()
 									.get(selectedPlayerCardId));
+							field.setColorField(logWindow.getUsersList().get(currentPlayerTurnId).getColor());
 
 							char dir = '-';
 							switch(field.getCardOnField().getFaces()) {
