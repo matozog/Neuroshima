@@ -271,21 +271,23 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			currentPlayerCards.add(playerCard1);
 			panelYourCards.setBackground(new Color(0, 0, 0, 125));
 			
+			
+
 			char dir = '-';
 			switch(card.getFaces()) {
 			case 'N':
-				dir = '^';
+				dir = '‚Üë';
 				break;
 			case 'E':
-				dir = 'õ';
+				dir = '‚Üí';
 				break;
 			case 'W':
-				dir = 'ã';
+				dir = '‚Üê';
 				break;
 			case 'S':
-				dir = '°';
+				dir = '‚Üì';
 				break;
-			}
+			} 
 
 			JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>"
 					+ "<font color=\"#00ff00\">+" + card.getHealth() + "</font><br/>"
@@ -517,16 +519,16 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 							char dir = '-';
 							switch(field.getCardOnField().getFaces()) {
 							case 'N':
-								dir = '^';
+								dir = '‚Üë';
 								break;
 							case 'E':
-								dir = 'õ';
+								dir = '‚Üí';
 								break;
 							case 'W':
-								dir = 'ã';
+								dir = '‚Üê';
 								break;
 							case 'S':
-								dir = '°';
+								dir = '‚Üì';
 								break;
 							}
 
