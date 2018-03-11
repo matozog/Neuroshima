@@ -41,7 +41,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
 
-public class NeuroshimaApp implements ActionListener, MenuListener, MouseListener {
+public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	private JFrame frame;
 	private LogWindow logWindow;
@@ -119,9 +119,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 
 		btnNextTurn = new JButton("Next Turn");
 		btnNextTurn.addActionListener(this);
-		btnNextTurn.setBounds(105, 158, 224, 33);
+		btnNextTurn.setBounds(263, 158, 149, 33);
 		btnNextTurn.setEnabled(false);
 		panelYourCards.add(btnNextTurn);
+		
+		JButton btnShowCards = new JButton("Show cards");
+		btnShowCards.setBounds(12, 158, 149, 33);
+		panelYourCards.add(btnShowCards);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -140,11 +144,9 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		mnGame.add(mntmExit);
 
 		mnHelp = new JMenu("Help");
-		mnHelp.addMenuListener(this);
 		menuBar.add(mnHelp);
 
-		mnAbout = new JMenu("About...");
-		mnAbout.addMenuListener(this);
+		mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
 
 		frame.setVisible(false);
@@ -176,21 +178,22 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				new Rectangle(3, 353, playerPanelWidth, playerPanelHeight),
 				new Rectangle(733, 353, playerPanelWidth, playerPanelHeight) };
 		if (playersCount < 2 || playersCount > 4) {
-			JOptionPane.showMessageDialog(null, "Niepoprawna liczba graczy");
+			JOptionPane.showMessageDialog(null, "Invalid number of players!");
 			return;
 		}
 
 		for (int i = 0; i < playersCount; i++) {
 			JPanel playerPanel = new JPanel();
 			JLabel scoreLabel = new JLabel("Score: 0");
-
+			scoreLabel.setForeground(Color.white);
 			scoreLabel.setBounds(new Rectangle(8, 15, 100, 20));
 
 			playerPanel.setLayout(null);
+
 			playerPanel.add(scoreLabel);
 			playerPanel.setBounds(bounds[i]);
 			playerPanel.setBorder(BorderFactory.createTitledBorder(logWindow.getUsersList().get(i).getName()));
-
+			playerPanel.setBackground(new Color(0, 0, 0, 125));
 			try {
 				Image img1 = ImageIO.read(getClass().getResource("/gui/images/card" + (i + 1) + ".png"));
 				JLabel card1 = new JLabel();
@@ -227,7 +230,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			imgBerserker = ImageIO.read(getClass().getResource("/gui/images/cardBerserker2.png"));
 			imgMachineGun = ImageIO.read(getClass().getResource("/gui/images/cardMachineGun2.png"));
 			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardSoldier2.png"));
-			imgSoldier = ImageIO.read(getClass().getResource("/gui/images/cardBattle.png"));
+			imgBattle = ImageIO.read(getClass().getResource("/gui/images/cardBattle.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -247,13 +250,13 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				currentCard = imgMachineGun;
 			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
-			} else if (card.getCardType().equals("Battle")) {
-				currentCard = imgBattle;
+			else if (card.getCardType().equals("Attack")) {				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
 			playerCard1.setBounds(widthpos, 20, 80, 130);
 			playerCard1.addMouseListener(this);
 			currentPlayerCards.add(playerCard1);
+			panelYourCards.setBackground(new Color(0, 0, 0, 125));
 			panelYourCards.add(playerCard1);
 			widthpos += 150;
 		}
@@ -340,30 +343,7 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 			}
 		});
 	}
-
-	@Override
-	public void menuSelected(MenuEvent e) {
-		Object source = e.getSource();
-
-		if (source == mnHelp) {
-			JOptionPane.showMessageDialog(null, "Tu bêdzie pomoc, zasady itp");
-			mnHelp.setSelected(false);
-		} else if (source == mnAbout) {
-			JOptionPane.showMessageDialog(null, "Program wykonali:\n\n £ukasz x2 Miki Mati Krzychu");
-			mnAbout.setSelected(false);
-		}
-	}
-
-	@Override
-	public void menuDeselected(MenuEvent e) {
-
-	}
-
-	@Override
-	public void menuCanceled(MenuEvent e) {
-
-	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
@@ -409,8 +389,8 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 				JOptionPane.showMessageDialog(null, "Select one card from \"Your cards\" panel");
 				return;
 			}
-			if (!cardDropped)
-				for (int i = 0; i < board.getHeight(); i++)
+			if (!cardDropped) {
+				for (int i = 0; i < board.getHeight(); i++) {
 					for (int j = 0; j < board.getWidth(); j++) {
 						if (source == board.getFieldOnBoard()[i][j] && board.getFieldOnBoard()[i][j].isAvailable()) {
 							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
@@ -439,8 +419,11 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 							}
 						}
 					}
-			else
+				}
+			}
+			else {
 				JOptionPane.showMessageDialog(null, "Your turn passed!");
+			}
 		}
 
 	}
@@ -452,13 +435,12 @@ public class NeuroshimaApp implements ActionListener, MenuListener, MouseListene
 		//take maximymInitiative from field thats not empty
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
-				if (!board.getFieldOnBoard()[i][j].isAvailable()) {
+
 					maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
 					break;
 				}
 
 			}
-		}
 		//fin maximumInitiative of cards on board + remeber i/j indexes of this card
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
