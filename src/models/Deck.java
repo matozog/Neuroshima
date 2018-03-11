@@ -9,7 +9,7 @@ public class Deck {
 	private int countBerserkerCards = 10;
 	private int countMachineGunCards = 10;
 	private int countSoldierCards = 10;
-	private int countAtackCards = 50;
+	private int countAtackCards = 5;
  
 	private int maxHPRange = 20;
 	private int maxDamageRange = 10;
@@ -48,7 +48,7 @@ public class Deck {
 	 */
 	private char GetRanedomFace() {
 		char faces[] = {'N', 'W' ,'S' ,'E'};
-		int randFace = (((int)Math.random() * 10) % 4);
+		int randFace = ((int)(Math.random() * 10) % 4);
 		return faces[randFace];
 	}
 

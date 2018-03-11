@@ -422,12 +422,35 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 							field.setIcon(logWindow.scaleImage(iconToImage(selectedPlayerCard.getIcon()), 70, 100));
 							field.setAvailable(false);
 							//Center card
-							Rectangle r = field.getBounds();
-							r.setLocation(field.getX()+17, field.getY());
-							r.setSize(r.width-17,r.height);
-							field.setBounds(r);
+//							Rectangle r = field.getBounds();
+//							r.setLocation(field.getX()+17, field.getY());
+//							r.setSize(r.width-17,r.height);
+//							field.setBounds(r);
 							field.setCardOnField(logWindow.getUsersList()
 									.get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
+
+							char dir = '-';
+							switch(field.getCardOnField().getFaces()) {
+							case 'N':
+								dir = '↑';
+								break;
+							case 'E':
+								dir = '→';
+								break;
+							case 'W':
+								dir = '←';
+								break;
+							case 'S':
+								dir = '↓';
+								break;
+							}
+							
+							JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>"
+									+ "<font color=\"#00ff00\">+" + field.getCardOnField().getHealth() + "</font><br/>"
+									+ "<font color=\"#ff0000\">-" + field.getCardOnField().getDamage() + "</font>"); 
+							f.setBounds(75,5,50,50);
+							f.setLayout(new FlowLayout());
+							field.add(f);
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
 
