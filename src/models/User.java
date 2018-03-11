@@ -1,5 +1,6 @@
 package models;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -37,7 +38,7 @@ final public class User {
 	/**
 	 * Player's color on the board.
 	 */
-	private String color;
+	private Color color;
 
 	/**
 	 * Player's deck of Cards.
@@ -132,16 +133,16 @@ final public class User {
 	/**
 	 * @return color
 	 */
-	public String getColor() {
+	public Color getColor() {
 		return color;
 	}
 
 	/**
-	 * @param color
+	 * @param orange
 	 *            the color to set
 	 */
-	public void setColor(String color) {
-		this.color = color;
+	public void setColor(Color orange) {
+		this.color = orange;
 	}
 
 	/**
