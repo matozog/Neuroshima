@@ -202,7 +202,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 			playerPanel.add(scoreLabel);
 			playerPanel.setBounds(bounds[i]);
-			playerPanel.setBorder(BorderFactory.createTitledBorder(logWindow.getUsersList().get(i).getName()));
+			String title = "<html><font color=white>"+logWindow.getUsersList().get(i).getName()+"</font></html>";
+			playerPanel.setBorder(BorderFactory.createTitledBorder(title));
 			playerPanel.setBackground(new Color(0, 0, 0, 125));
 			try {
 				Image img1 = ImageIO.read(getClass().getResource("/gui/images/card" + (i + 1) + ".png"));
