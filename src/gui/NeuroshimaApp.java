@@ -75,6 +75,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private int selectedPlayerCardId = -1;
 	private int widthBoard = 4, heightBoard = 4;
 	private Deck deck;
+	private int maximumInitiative = 0;
 
 	/**
 	 * Create the application.
@@ -257,8 +258,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				currentCard = imgMachineGun;
 			} else if (card.getCardType().equals("Soldier")) {
 				currentCard = imgSoldier;
-			}
-			else if (card.getCardType().equals("Attack")) {				currentCard = imgBattle;
+			} else if (card.getCardType().equals("Attack")) {
+				currentCard = imgBattle;
 			}
 			playerCard1.setIcon(logWindow.scaleImage(currentCard, 80, 130));
 			playerCard1.setBounds(widthpos, 20, 80, 130);
@@ -419,16 +420,16 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 					for (int j = 0; j < board.getWidth(); j++) {
 						if (source == board.getFieldOnBoard()[i][j] && board.getFieldOnBoard()[i][j].isAvailable()) {
 							Field field = board.getFieldOnBoard()[i][j];
-							
+
 							field.setIcon(logWindow.scaleImage(iconToImage(selectedPlayerCard.getIcon()), 70, 100));
 							field.setAvailable(false);
-							//Center card
+							// Center card
 							Rectangle r = field.getBounds();
-							r.setLocation(field.getX()+17, field.getY());
-							r.setSize(r.width-17,r.height);
+							r.setLocation(field.getX() + 17, field.getY());
+							r.setSize(r.width - 17, r.height);
 							field.setBounds(r);
-							field.setCardOnField(logWindow.getUsersList()
-									.get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
+							field.setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()
+									.get(selectedPlayerCardId));
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
 
@@ -457,27 +458,36 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 
 	}
-	int remeberI = 0;
-	int remeberJ = 0;
+
+	private Field[][] checkStatusCard(Field[][] copyField) {
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+				if(board.getFieldOnBoard()[i][j].getCardOnField().getHealth() <= 0) {
+					copyField[i][j].setAvailable(true);
+					copyField[i][j] = null;
+					
+				}
+			}
+		}
+		return copyField;
+	}
 	private void findMaximum() {
-		//declare first random maximymInitiative
+		// declare first random maximymInitiative
 		int maximumInitiative = board.getFieldOnBoard()[0][0].getCardOnField().getInitiative();
-		//take maximymInitiative from field thats not empty
+		// take maximymInitiative from field thats not empty
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
 
-					maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
-					break;
-				}
-
+				maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+				break;
 			}
-		//fin maximumInitiative of cards on board + remeber i/j indexes of this card
+
+		}
+		// fin maximumInitiative of cards on board + remeber i/j indexes of this card
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
 				if (maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
 					maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
-					remeberI = i;
-					remeberJ = j;
 				}
 			}
 		}
@@ -485,9 +495,34 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	private void battle() {
 		// TODO Auto-generated method stub
-		Field[][] copyField = board.getFieldOnBoard().clone();
-		// copyField.
+		Field[][] copyField = new Field[board.getHeight()][board.getWidth()];
+		// = board.getFieldOnBoard().clone();
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+				copyField[i][j] = board.getFieldOnBoard()[i][j];
+			}
+		}
+		while (maximumInitiative != 0) {
+			for (int i = 0; i < board.getHeight(); i++) {
+				for (int j = 0; j < board.getWidth(); j++) {
+					if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
+						if (board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() == maximumInitiative) {
+							board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
+							
+						}
+					}
+				}
+			}
+			copyField = checkStatusCard(copyField);
+			maximumInitiative--;
+		}
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+				board.getFieldOnBoard()[i][j] = copyField[i][j];
+			}
+		}
 		
+		// copyField.
 
 		// copyField.sort(Comparator.comparing(Card::getInitiative()));
 
