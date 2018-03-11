@@ -369,10 +369,13 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			clearPanelYourCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
+			btnShowCards.setEnabled(true);
 		}
 		else if(source == btnShowCards)
 		{
 			GenerateCurrentPlayerCards();
+			System.out.print("\n after generate current players cards "+panelYourCards.getComponentCount() + "\n");
+			btnShowCards.setEnabled(false);
 			//panelYourCards.repaint();
 		}
 		else if(source == mnItemAbout)
@@ -436,9 +439,10 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		System.out.print(panelYourCards.getComponentCount());
 		for(int i=0; i < panelYourCards.getComponentCount();i++)
 		{
-			System.out.print(panelYourCards.getComponent(i).getName());
+			System.out.print("\n panel card before if " + panelYourCards.getComponentCount() + "\n");
 			if(panelYourCards.getComponent(i) instanceof JLabel)
-			{
+			{			System.out.print(panelYourCards.getComponent(i) + " " +  i  + "\n");
+						
 				panelYourCards.remove(i);
 			}
 		}
