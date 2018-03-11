@@ -1,12 +1,15 @@
 package gui;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.Comparator;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +41,11 @@ import java.awt.Component;
 
 import javax.swing.border.EtchedBorder;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
@@ -122,7 +131,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		btnNextTurn.setBounds(263, 158, 149, 33);
 		btnNextTurn.setEnabled(false);
 		panelYourCards.add(btnNextTurn);
-		
+
 		JButton btnShowCards = new JButton("Show cards");
 		btnShowCards.setBounds(12, 158, 149, 33);
 		panelYourCards.add(btnShowCards);
@@ -152,11 +161,9 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		frame.setVisible(false);
 
 		logWindow.setVisible(true);
-
 	}
 
 	public void ShowMainFrame() {
-
 		frame.setVisible(true);
 		deck = new Deck();
 		GeneratePlayersPanels(logWindow.getUsersList().size());
@@ -343,10 +350,27 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			}
 		});
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
+	}
+
+	private static Image iconToImage(Icon icon) {
+		if (icon instanceof ImageIcon) {
+			return ((ImageIcon) icon).getImage();
+		} else {
+			int w = icon.getIconWidth();
+			int h = icon.getIconHeight();
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			GraphicsDevice gd = ge.getDefaultScreenDevice();
+			GraphicsConfiguration gc = gd.getDefaultConfiguration();
+			BufferedImage image = gc.createCompatibleImage(w, h);
+			Graphics2D g = image.createGraphics();
+			icon.paintIcon(null, g, 0, 0);
+			g.dispose();
+			return image;
+		}
 	}
 
 	@Override
@@ -393,10 +417,16 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				for (int i = 0; i < board.getHeight(); i++) {
 					for (int j = 0; j < board.getWidth(); j++) {
 						if (source == board.getFieldOnBoard()[i][j] && board.getFieldOnBoard()[i][j].isAvailable()) {
-							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
-							board.getFieldOnBoard()[i][j].setAvailable(false);
-							board.getFieldOnBoard()[i][j].setIcon(selectedPlayerCard.getIcon());
-							board.getFieldOnBoard()[i][j].setCardOnField(logWindow.getUsersList()
+							Field field = board.getFieldOnBoard()[i][j];
+							
+							field.setIcon(logWindow.scaleImage(iconToImage(selectedPlayerCard.getIcon()), 70, 100));
+							field.setAvailable(false);
+							//Center card
+							Rectangle r = field.getBounds();
+							r.setLocation(field.getX()+17, field.getY());
+							r.setSize(r.width-17,r.height);
+							field.setBounds(r);
+							field.setCardOnField(logWindow.getUsersList()
 									.get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
@@ -420,8 +450,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 						}
 					}
 				}
-			}
-			else {
+			} else {
 				JOptionPane.showMessageDialog(null, "Your turn passed!");
 			}
 		}
@@ -457,7 +486,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 		Field[][] copyField = board.getFieldOnBoard().clone();
 		// copyField.
-		copyField.
+		
 
 		// copyField.sort(Comparator.comparing(Card::getInitiative()));
 
