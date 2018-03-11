@@ -32,6 +32,7 @@ import models.Board;
 import models.Card;
 import models.Deck;
 import models.Field;
+import models.Pair;
 import models.User;
 
 import javax.swing.JPanel;
@@ -605,6 +606,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	private void battle() {
 		// TODO Auto-generated method stub
+		ArrayList<Pair<Integer, Integer>> getAttacksResult= new ArrayList<>();
 		Field[][] copyField = new Field[board.getHeight()][board.getWidth()];
 		// = board.getFieldOnBoard().clone();
 		for (int i = 0; i < board.getHeight(); i++) {
@@ -613,11 +615,13 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			}
 		}
 		while (maximumInitiative != 0) {
+			// look for card with maximumInitiative
 			for (int i = 0; i < board.getHeight(); i++) {
 				for (int j = 0; j < board.getWidth(); j++) {
 					if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
+						//find this card and call getAttack
 						if (board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() == maximumInitiative) {
-							board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
+							getAttacksResult = board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
 							
 						}
 					}
