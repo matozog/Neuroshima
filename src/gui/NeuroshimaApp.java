@@ -116,7 +116,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		panelNextTurn.setLayout(null);
 		frame.getContentPane().add(panelNextTurn);
 
-		lblNextTurn = new JLabel("<html>Next turn: <b>Player1</b>");
+		lblNextTurn = new JLabel();
 		lblNextTurn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNextTurn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNextTurn.setBounds(12, 0, 404, 24);
@@ -176,6 +176,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		GeneratePlayersPanels(logWindow.getUsersList().size());
 		GenerateBoard();
 		GeneratePlayerCards();
+		lblNextTurn.setText("<html>Actual turn: <b>" + logWindow.getUsersList().get(0).getName() + "</b>");
 		//GenerateCurrentPlayerCards();
 	}
 
@@ -318,7 +319,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	}
 
 	public void SetNextTurn(int player) {
-		lblNextTurn.setText("<html>Next turn: <b>" + logWindow.getUsersList().get(player).getName() + "</b>");
+		lblNextTurn.setText("<html>Actual turn: <b>" + logWindow.getUsersList().get(player).getName() + "</b>");
 	}
 
 	/**
@@ -366,6 +367,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			if (currentPlayerTurnId == logWindow.getUsersList().size())
 				currentPlayerTurnId = 0;
 			//GenerateCurrentPlayerCards();
+			SetNextTurn(currentPlayerTurnId);
 			clearPanelYourCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
@@ -418,7 +420,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 		else if(source == mnNewGame)
 		{
-			if(JOptionPane.showConfirmDialog(null, "This nick is used, would you like to play as this player?","Question",
+			if(JOptionPane.showConfirmDialog(null, "Do you really want to start a new game? Changes will be lost?","Question",
 					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
 			{
 				for(User user:logWindow.getUsersList())
@@ -437,12 +439,12 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private void clearPanelYourCards()
 	{
 		System.out.print(panelYourCards.getComponentCount());
-		for(int i=0; i < panelYourCards.getComponentCount();i++)
+		for(int i=panelYourCards.getComponentCount()-1; i>=0;i--)
 		{
 			System.out.print("\n panel card before if " + panelYourCards.getComponentCount() + "\n");
 			if(panelYourCards.getComponent(i) instanceof JLabel)
-			{			System.out.print(panelYourCards.getComponent(i) + " " +  i  + "\n");
-						
+			{			
+				System.out.print(panelYourCards.getComponent(i) + " " +  i  + "\n");	
 				panelYourCards.remove(i);
 			}
 		}
