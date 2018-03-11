@@ -76,6 +76,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private int widthBoard = 4, heightBoard = 4;
 	private Deck deck;
 	private JMenuItem mnItemAbout, mnItemHelp,mnNewGame;
+	private int maximumInitiative = 0;
 
 	/**
 	 * Create the application.
@@ -273,16 +274,16 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			char dir = '-';
 			switch(card.getFaces()) {
 			case 'N':
-				dir = 'â†‘';
+				dir = '^';
 				break;
 			case 'E':
-				dir = 'â†’';
+				dir = '›';
 				break;
 			case 'W':
-				dir = 'â†';
+				dir = '‹';
 				break;
 			case 'S':
-				dir = 'â†“';
+				dir = '¡';
 				break;
 			}
 
@@ -464,6 +465,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		boolean isCard1 = ((currentPlayerCards.size() >= 1) ? true : false);
 		boolean isCard2 = ((currentPlayerCards.size() >= 2) ? true : false);
 		boolean isCard3 = ((currentPlayerCards.size() >= 3) ? true : false);
+
 		if (isCard1 && source == currentPlayerCards.get(0)) {
 			if (isCard1)
 				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
@@ -501,30 +503,30 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 					for (int j = 0; j < board.getWidth(); j++) {
 						if (source == board.getFieldOnBoard()[i][j] && board.getFieldOnBoard()[i][j].isAvailable()) {
 							Field field = board.getFieldOnBoard()[i][j];
-							
+
 							field.setIcon(logWindow.scaleImage(iconToImage(selectedPlayerCard.getIcon()), 70, 100));
 							field.setAvailable(false);
-							//Center card
+							// Center card
 //							Rectangle r = field.getBounds();
 //							r.setLocation(field.getX()+17, field.getY());
 //							r.setSize(r.width-17,r.height);
 //							field.setBounds(r);
-							field.setCardOnField(logWindow.getUsersList()
-									.get(currentPlayerTurnId).GetUserCards().get(selectedPlayerCardId));
+							field.setCardOnField(logWindow.getUsersList().get(currentPlayerTurnId).GetUserCards()
+									.get(selectedPlayerCardId));
 
 							char dir = '-';
 							switch(field.getCardOnField().getFaces()) {
 							case 'N':
-								dir = 'â†‘';
+								dir = '^';
 								break;
 							case 'E':
-								dir = 'â†’';
+								dir = '›';
 								break;
 							case 'W':
-								dir = 'â†';
+								dir = '‹';
 								break;
 							case 'S':
-								dir = 'â†“';
+								dir = '¡';
 								break;
 							}
 
@@ -545,7 +547,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 							btnNextTurn.setEnabled(true);
 							cardDropped = true;
 							String attackString = "Attack";
-							if (attackString.equals(field.getCardOnField().getCardType()))
+							if (attackString.equals(board.getFieldOnBoard()[i][j].getCardOnField().getCardType()))
 								battleStart = true;
 							if (battleStart) {
 								// shows message and calls battle start
@@ -563,15 +565,31 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	}
 
+	private Field[][] checkStatusCard(Field[][] copyField) {
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+				if(board.getFieldOnBoard()[i][j].getCardOnField().getHealth() <= 0) {
+					copyField[i][j].setAvailable(true);
+					copyField[i][j] = null;
+					
+				}
+			}
+		}
+		return copyField;
+	}
 	private void findMaximum() {
+		// declare first random maximymInitiative
 		int maximumInitiative = board.getFieldOnBoard()[0][0].getCardOnField().getInitiative();
+		// take maximymInitiative from field thats not empty
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
 
 				maximumInitiative = board.getFieldOnBoard()[i][j].getCardOnField().getInitiative();
+				break;
 			}
 
 		}
+		// fin maximumInitiative of cards on board + remeber i/j indexes of this card
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
 				if (maximumInitiative < board.getFieldOnBoard()[i][j].getCardOnField().getInitiative()) {
@@ -583,7 +601,33 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 	private void battle() {
 		// TODO Auto-generated method stub
-		Field[][] copyField = board.getFieldOnBoard().clone();
+		Field[][] copyField = new Field[board.getHeight()][board.getWidth()];
+		// = board.getFieldOnBoard().clone();
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+				copyField[i][j] = board.getFieldOnBoard()[i][j];
+			}
+		}
+		while (maximumInitiative != 0) {
+			for (int i = 0; i < board.getHeight(); i++) {
+				for (int j = 0; j < board.getWidth(); j++) {
+					if (board.getFieldOnBoard()[i][j].isAvailable() == false) {
+						if (board.getFieldOnBoard()[i][j].getCardOnField().getInitiative() == maximumInitiative) {
+							board.getFieldOnBoard()[i][j].getCardOnField().getAttacks();
+							
+						}
+					}
+				}
+			}
+			copyField = checkStatusCard(copyField);
+			maximumInitiative--;
+		}
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth(); j++) {
+				board.getFieldOnBoard()[i][j] = copyField[i][j];
+			}
+		}
+		
 		// copyField.
 
 		// copyField.sort(Comparator.comparing(Card::getInitiative()));
