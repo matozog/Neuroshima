@@ -736,6 +736,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 						if(copyField[i][j].getCardOnField()!=null)
 						{
 							copyField[i][j].setIcon(null);
+							copyField[i][j].setBorder(BorderFactory.createEmptyBorder());
 						}
 					}
 					panelGameMain.add(copyField[i][j]);
