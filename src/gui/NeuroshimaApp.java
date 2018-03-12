@@ -489,7 +489,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 		if (isCard1 && source == currentPlayerCards.get(0)) {
 			if (isCard1)
-				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(logWindow.getUsersList().get(currentPlayerTurnId).getColor(), 3));
 			if (isCard2)
 				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			if (isCard3)
@@ -500,7 +500,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			if (isCard1)
 				currentPlayerCards.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			if (isCard2)
-				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(logWindow.getUsersList().get(currentPlayerTurnId).getColor(), 3));
 			if (isCard3)
 				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			selectedPlayerCard = currentPlayerCards.get(1);
@@ -511,7 +511,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			if (isCard2)
 				currentPlayerCards.get(1).setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 			if (isCard3)
-				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+				currentPlayerCards.get(2).setBorder(BorderFactory.createLineBorder(logWindow.getUsersList().get(currentPlayerTurnId).getColor(), 3));
 			selectedPlayerCard = currentPlayerCards.get(2);
 			selectedPlayerCardId = 2;
 		} else {
@@ -692,15 +692,57 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				
 				if (copyField[i][j] != null)
 					if (copyField[i][j].getCardOnField() != null)
-					System.out.print(copyField[i][j].getCardOnField().toString());
+					System.out.print(copyField[i][j].getCardOnField().toString()  + "\n");
 				//	System.out.print(i + " " + j + " - " + copyField[i][j].getCardOnField().getCardType() + "\n");
 			}
 		}
-
+		repaintMainBoard(copyField);
 		// copyField.
 
 		// copyField.sort(Comparator.comparing(Card::getInitiative()));
 
+	}
+	
+	public void repaintMainBoard(Field[][] copyField)
+	{
+		for(Component component:panelGameMain.getComponents())
+		{
+			if(component instanceof Field)
+			{
+				System.out.print("comp");
+				panelGameMain.remove(component);
+			}
+		}
+		int width = panelGameMain.getWidth();
+		int height = panelGameMain.getHeight();
+
+		int cellWidth = width / 4;
+		int cellHeight = height / 4;
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				/*Field field = new Field(cellWidth, cellHeight);
+				field.setBounds(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+				field.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				field.addMouseListener(this);
+				board.getFieldOnBoard()[i][j] = field;*/
+				
+					//if (copyField[i][j].getCardOnField() != null )
+						//if(copyField[i][j].isAvailable()==false)
+				if (copyField[i][j] != null)
+				{
+					if(copyField[i][j].isAvailable()==true)
+					{
+						if(copyField[i][j].getCardOnField()!=null)
+						{
+							copyField[i][j].setIcon(null);
+						}
+					}
+					panelGameMain.add(copyField[i][j]);
+				}
+			}
+		}
+		panelGameMain.repaint();
 	}
 
 	@Override

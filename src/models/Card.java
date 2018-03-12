@@ -1,6 +1,9 @@
 package models;
 
 import java.util.ArrayList;
+
+import javax.swing.JLabel;
+
 import java.lang.Integer;
 
 
@@ -8,6 +11,10 @@ import java.lang.Integer;
  * Abstract class of a card.
  */
 public abstract class Card {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * A type of a card. Must be one of: "Soldier", "MachineGun", "Berserker", "Sniper" or "Battle".
 	 */
