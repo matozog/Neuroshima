@@ -740,17 +740,45 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				
 					//if (copyField[i][j].getCardOnField() != null )
 						//if(copyField[i][j].isAvailable()==false)
+
+				
+				
 				if (copyField[i][j] != null)
 				{
+
+					if(copyField[i][j].getCardOnField()!=null) 
+					{
+						char dir = '-';
+						switch (copyField[i][j].getCardOnField().getFaces()) {
+						case 'N':
+							dir = '↑';
+							break;
+						case 'E':
+							dir = '→';
+							break;
+						case 'W':
+							dir = '←';
+							break;
+						case 'S':
+							dir = '↓';
+							break;
+						}
+						String text = "<html><font color=\"#ffff00\">" + dir + "</font><br/>"
+								+ "<font color=\"#00ff00\">+" + copyField[i][j].getCardOnField().getHealth() + "</font><br/>"
+								+ "<font color=\"#ff0000\">-" + copyField[i][j].getCardOnField().getDamage() + "</font><br/>"
+								+ "<font color=\"#00bfff\">" + copyField[i][j].getCardOnField().getInitiative() + "</font>";
+						copyField[i][j].setLblAttribute(text);
+					}
 					if(copyField[i][j].isAvailable()==true)
 					{
-						if(copyField[i][j].getCardOnField()!=null)
+						if(copyField[i][j].getCardOnField()!=null)	
 						{
 							copyField[i][j].setIcon(null);
 							copyField[i][j].setBorder(BorderFactory.createEmptyBorder());
 							copyField[i][j].getLblAttribute().setText("");
 						}
 					}
+
 					panelGameMain.add(copyField[i][j]);
 				}
 			}
