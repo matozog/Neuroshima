@@ -59,7 +59,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 	private JMenu mnAbout;
 	private JMenu mnOther;
 	private JPanel panelGameMain;
-	private JButton btnNextTurn,btnShowCards;
+	private JButton btnNextTurn, btnShowCards;
 	private ArrayList<JPanel> playersPanels = new ArrayList<JPanel>();
 	private ArrayList<JLabel> playersLabel = new ArrayList<JLabel>();
 	private ArrayList<JLabel> boardCells = new ArrayList<JLabel>();
@@ -179,9 +179,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		GenerateBoard();
 		GeneratePlayerCards();
 		lblNextTurn.setText("<html>Actual turn: <b>" + logWindow.getUsersList().get(0).getName() + "</b>");
-		for(int i=0; i<logWindow.getUsersList().size();i++)
-		{
-			switch(i) {
+		for (int i = 0; i < logWindow.getUsersList().size(); i++) {
+			switch (i) {
 			case 0:
 				logWindow.getUsersList().get(i).setColor(Color.ORANGE);
 				break;
@@ -196,7 +195,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 				break;
 			}
 		}
-		//GenerateCurrentPlayerCards();
+		// GenerateCurrentPlayerCards();
 	}
 
 	/**
@@ -382,64 +381,46 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 			currentPlayerTurnId++;
 			if (currentPlayerTurnId == logWindow.getUsersList().size())
 				currentPlayerTurnId = 0;
-			//GenerateCurrentPlayerCards();
+			// GenerateCurrentPlayerCards();
 			SetNextTurn(currentPlayerTurnId);
 			clearPanelYourCards();
 			btnNextTurn.setEnabled(false);
 			cardDropped = false;
 			btnShowCards.setEnabled(true);
-		}
-		else if(source == btnShowCards)
-		{
+		} else if (source == btnShowCards) {
 			GenerateCurrentPlayerCards();
 			btnShowCards.setEnabled(false);
-			//panelYourCards.repaint();
-		}
-		else if(source == mnItemAbout)
-		{
-			JOptionPane.showMessageDialog(null, "Game rules\r\n" + 
-					"\r\n" + 
-					"\r\n" + 
-					"Game board has 16 squares (4x4).\r\n" + 
-					"Every player in their turn draw a card a must place it on the board.\r\n" +
-					"There are 4 types of cards:\r\n" +
-					"1. MachineGuy - this card attacks everybody in a straight line.\r\n"+
-					"2. Soldier - this card can attack only field in front of a card.\r\n"+
-					"3. Berserker - this card attacks everybody around.\r\n" +
-					"4. Battle - this card starts fight.\r\n" +
-					"If they draw a battle card then:\r\n" + 
-					"Battle:\r\n" + 
-					"Every card has its initiative (the higher the number the earlier card will attack)\r\n" + 
-					"card that is being attacked will have decreased its HP points by a DMG points of an attacking card\r\n" + 
-					"at the end of a initiative every card that has less than 0 HP points is removed from the board\r\n" + 
-					"player gets points for every card that their card will remove from the board (the amount of removed card's HP points)" +
-					"\r\n" +
-					"\r\n"+
-					"The player that reaches the best score (the player who eliminated the most cards) win the game\r\n");
-		}
-		else if( source ==  mnItemHelp)
-		{
-			JOptionPane.showMessageDialog(null, "Help\r\n" + 
-		"\r\n" +
-		"\r\n" +
-		"Useful tips!\r\n" +
-		"- place your Soldier cards only in front of some other card, not in front of empty field, because this card attack target thats in front of him!\r\n" +
-		"- when you want to place a Berserker card, try to hit as many players arround as possible!\r\n" +
-		"- place your Machine Guy card in a straight line that contains as many enemy cards as possible\r\n" +
-		"- if the field is full of cards it will automacilly call for the Battle\r\n"+
-		"- when the game starts you've got 3 cards on your hand\r\n"+
-		"- you can only have 3 cards on your hand\r\n"+
-		"- you have to put on field one card in your turn\r\n"+
-		"- the player who eliminated the most cards int every battle win the game\r\n");
+			// panelYourCards.repaint();
+		} else if (source == mnItemAbout) {
+			JOptionPane.showMessageDialog(null, "Game rules\r\n" + "\r\n" + "\r\n"
+					+ "Game board has 16 squares (4x4).\r\n"
+					+ "Every player in their turn draw a card a must place it on the board.\r\n"
+					+ "There are 4 types of cards:\r\n"
+					+ "1. MachineGuy - this card attacks everybody in a straight line.\r\n"
+					+ "2. Soldier - this card can attack only field in front of a card.\r\n"
+					+ "3. Berserker - this card attacks everybody around.\r\n"
+					+ "4. Battle - this card starts fight.\r\n" + "If they draw a battle card then:\r\n" + "Battle:\r\n"
+					+ "Every card has its initiative (the higher the number the earlier card will attack)\r\n"
+					+ "card that is being attacked will have decreased its HP points by a DMG points of an attacking card\r\n"
+					+ "at the end of a initiative every card that has less than 0 HP points is removed from the board\r\n"
+					+ "player gets points for every card that their card will remove from the board (the amount of removed card's HP points)"
+					+ "\r\n" + "\r\n"
+					+ "The player that reaches the best score (the player who eliminated the most cards) win the game\r\n");
+		} else if (source == mnItemHelp) {
+			JOptionPane.showMessageDialog(null, "Help\r\n" + "\r\n" + "\r\n" + "Useful tips!\r\n"
+					+ "- place your Soldier cards only in front of some other card, not in front of empty field, because this card attack target thats in front of him!\r\n"
+					+ "- when you want to place a Berserker card, try to hit as many players arround as possible!\r\n"
+					+ "- place your Machine Guy card in a straight line that contains as many enemy cards as possible\r\n"
+					+ "- if the field is full of cards it will automacilly call for the Battle\r\n"
+					+ "- when the game starts you've got 3 cards on your hand\r\n"
+					+ "- you can only have 3 cards on your hand\r\n"
+					+ "- you have to put on field one card in your turn\r\n"
+					+ "- the player who eliminated the most cards int every battle win the game\r\n");
 
-		}
-		else if(source == mnNewGame)
-		{
-			if(JOptionPane.showConfirmDialog(null, "Do you really want to start a new game? Changes will be lost?","Question",
-					JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE)==0)
-			{
-				for(User user:logWindow.getUsersList())
-				{
+		} else if (source == mnNewGame) {
+			if (JOptionPane.showConfirmDialog(null, "Do you really want to start a new game? Changes will be lost?",
+					"Question", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
+				for (User user : logWindow.getUsersList()) {
 					user.setScore(0);
 				}
 				logWindow = null;
@@ -451,18 +432,15 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		}
 	}
 
-	private void clearPanelYourCards()
-	{
-		for(int i=panelYourCards.getComponentCount()-1; i>=0;i--)
-		{
-			if(panelYourCards.getComponent(i) instanceof JLabel)
-			{				
+	private void clearPanelYourCards() {
+		for (int i = panelYourCards.getComponentCount() - 1; i >= 0; i--) {
+			if (panelYourCards.getComponent(i) instanceof JLabel) {
 				panelYourCards.remove(i);
 			}
 		}
 		panelYourCards.repaint();
 	}
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -707,11 +685,15 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 
 			maximumInitiative--;
 		}
+		
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
-				board.getFieldOnBoard()[i][j] = copyField[i][j];
-				if(!copyField[i][j].isAvailable() || !"Attack".equals(copyField[i][j].getCardOnField().getCardType()) || copyField[i][j]!=null)
-					System.out.print( i + " " + j + " - " +  copyField[i][j].getCardOnField().getCardType() + "\n");
+				//board.getFieldOnBoard()[i][j] = copyField[i][j];
+				
+				if (copyField[i][j] != null)
+					if (copyField[i][j].getCardOnField() != null)
+					System.out.print(copyField[i][j].getCardOnField().toString());
+				//	System.out.print(i + " " + j + " - " + copyField[i][j].getCardOnField().getCardType() + "\n");
 			}
 		}
 

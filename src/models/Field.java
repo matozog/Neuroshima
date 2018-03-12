@@ -8,6 +8,11 @@ import javax.swing.JLabel;
 public class Field extends JLabel {
 
 	private int width, height;
+	@Override
+	public String toString() {
+		return "Field [available=" + available + ", cardOnField=" + cardOnField + "]";
+	}
+
 	private boolean available=true;
 	private Card cardOnField=null;
 	

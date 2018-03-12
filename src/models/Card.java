@@ -59,6 +59,11 @@ public abstract class Card {
 		this.initiative = initiative;
 	}
 
+	@Override
+	public String toString() {
+		return "Card [cardType=" + cardType + "]";
+	}
+
 	public String getCardType() {
 		return cardType;
 	}
