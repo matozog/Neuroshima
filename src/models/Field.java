@@ -8,14 +8,21 @@ import javax.swing.JLabel;
 public class Field extends JLabel {
 
 	private int width, height;
+	@Override
+	public String toString() {
+		return "Field [available=" + available + ", cardOnField=" + cardOnField + "]";
+	}
+
 	private boolean available=true;
 	private Card cardOnField=null;
-	
+	protected JLabel lblAttribute;
 	
 	public Field(int width, int height)
 	{
 		this.width = width;
 		this.height = height;
+		lblAttribute = new JLabel();
+		this.add(lblAttribute);
 	}
 	/**
 	 * 
@@ -33,6 +40,15 @@ public class Field extends JLabel {
 		this.available = available;
 	}
 
+	public void setLblAttribute(String text)
+	{
+		lblAttribute.setText(text);
+	}
+	
+	public JLabel getLblAttribute()
+	{
+		return lblAttribute;
+	}
 	
 	public Card getCardOnField() {
 		return cardOnField;

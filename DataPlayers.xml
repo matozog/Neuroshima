@@ -2,79 +2,25 @@
 <Players>
     <Player>
         <ID>1</ID>
-        <Name>Zukuu</Name>
+        <Name>Player 1</Name>
         <Rank>1</Rank>
         <Score>0</Score>
     </Player>
     <Player>
         <ID>2</ID>
-        <Name>Mati</Name>
-        <Rank>1</Rank>
+        <Name>Player 2</Name>
+        <Rank>0</Rank>
         <Score>0</Score>
     </Player>
     <Player>
         <ID>3</ID>
-        <Name>LuL</Name>
+        <Name>Player 3</Name>
         <Rank>0</Rank>
         <Score>0</Score>
     </Player>
     <Player>
         <ID>4</ID>
-        <Name>Pazur</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>5</ID>
-        <Name>Karol</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>6</ID>
-        <Name>Brokul</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>7</ID>
-        <Name>Grzechu</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>8</ID>
-        <Name>luk</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>9</ID>
-        <Name>Luk</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>10</ID>
-        <Name>Krzysiek</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>11</ID>
-        <Name>Lukas</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>12</ID>
-        <Name>Sfsdf</Name>
-        <Rank>0</Rank>
-        <Score>0</Score>
-    </Player>
-    <Player>
-        <ID>13</ID>
-        <Name>SFf</Name>
+        <Name>Player 4</Name>
         <Rank>0</Rank>
         <Score>0</Score>
     </Player>

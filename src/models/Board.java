@@ -30,4 +30,19 @@ public class Board {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+	
+	public boolean isFull()
+	{
+		for( int n=0; n<getHeight();n++)
+		{
+			for(int m=0;m<getWidth();m++)
+			{
+				if(fieldOnBoard[n][m].isAvailable())
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
