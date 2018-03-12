@@ -547,14 +547,14 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 								break;
 							}
 
-							JLabel f = new JLabel("<html><font color=\"#ffff00\">" + dir + "</font><br/>"
+							String text = "<html><font color=\"#ffff00\">" + dir + "</font><br/>"
 									+ "<font color=\"#00ff00\">+" + field.getCardOnField().getHealth() + "</font><br/>"
 									+ "<font color=\"#ff0000\">-" + field.getCardOnField().getDamage() + "</font><br/>"
-									+ "<font color=\"#00bfff\">" + field.getCardOnField().getInitiative() + "</font>");
+									+ "<font color=\"#00bfff\">" + field.getCardOnField().getInitiative() + "</font>";
 
-							f.setBounds(75, 5, 50, 60);
-							f.setLayout(new FlowLayout());
-							field.add(f);
+							field.getLblAttribute().setBounds(75, 5, 50, 60);
+							field.getLblAttribute().setLayout(new FlowLayout());
+							field.setLblAttribute(text);
 							selectedPlayerCard.setBorder(BorderFactory.createLineBorder(Color.RED, 0));
 							selectedPlayerCard.setVisible(false);
 
@@ -570,7 +570,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 								battleStart = true;
 							battleX = i;
 							battleY = j;
-								
+							if(board.isFull())
+								battleStart = true;
 							// field.setAvailable(true);
 							if (battleStart) {
 								// shows message and calls battle start
@@ -582,9 +583,14 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 					}
 				}
 
-			} else {
-				JOptionPane.showMessageDialog(null, "Your turn passed!");
+			} 
+			else if (!btnNextTurn.isEnabled())
+			{
+				JOptionPane.showMessageDialog(null, "The battle starts now!");
+				battle();
+				battleStart = false;
 			}
+			else 	JOptionPane.showMessageDialog(null, "Your turn passed!");
 		}
 
 	}
@@ -742,6 +748,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 						{
 							copyField[i][j].setIcon(null);
 							copyField[i][j].setBorder(BorderFactory.createEmptyBorder());
+							copyField[i][j].getLblAttribute().setText("");
 						}
 					}
 					panelGameMain.add(copyField[i][j]);
