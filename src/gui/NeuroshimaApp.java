@@ -666,7 +666,7 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 											&& !board.getFieldOnBoard()[x][y].isAvailable()) {
 										int hp = board.getFieldOnBoard()[x][y].getCardOnField().getHealth();
 										hp -= board.getFieldOnBoard()[i][j].getCardOnField().getDamage();
-										board.getFieldOnBoard()[x][y].getCardOnField().setHealth(hp);
+										copyField[x][y].getCardOnField().setHealth(hp);
 
 										if (hp <= 0
 												&& !"Attack".equals(
