@@ -710,6 +710,8 @@ public class NeuroshimaApp implements ActionListener, MouseListener {
 		for (int i = 0; i < board.getHeight(); i++) {
 			for (int j = 0; j < board.getWidth(); j++) {
 				board.getFieldOnBoard()[i][j] = copyField[i][j];
+				if(!copyField[i][j].isAvailable() || !"Attack".equals(copyField[i][j].getCardOnField().getCardType()) || copyField[i][j]!=null)
+					System.out.print( i + " " + j + " - " +  copyField[i][j].getCardOnField().getCardType() + "\n");
 			}
 		}
 
