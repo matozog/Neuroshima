@@ -44,13 +44,15 @@ public abstract class Card {
 	 */
 	protected int initiative;
 	
-	protected User owner;
+	protected boolean attackedInThisTour = false;
+	
+	protected Player owner;
 
-	public User getOwner() {
+	public Player getOwner() {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
 	
@@ -71,6 +73,14 @@ public abstract class Card {
 		return "Card [cardType=" + cardType + "]";
 	}
 
+	public boolean isAttackedInThisTour(){
+		return attackedInThisTour;
+	}
+	
+	public void setAttackedInThisTour(boolean attackedInTour) {
+		this.attackedInThisTour = attackedInTour;
+	}
+	
 	public String getCardType() {
 		return cardType;
 	}
@@ -125,6 +135,31 @@ public abstract class Card {
 
 	public void decreaseHealth(int amount){
 		health -= amount;
+	}
+	
+	public String getDescribe() {
+		char dir = '-';
+		switch (getFaces()) {
+		case 'N':
+			dir = '↑';
+			break;
+		case 'E':
+			dir = '→';
+			break;
+		case 'W':
+			dir = '←';
+			break;
+		case 'S':
+			dir = '↓';
+			break;
+		}
+
+		String describe = "<html><font color=\"#ffff00\">" + dir + "</font><br/>"
+				+ "<font color=\"#00ff00\">+" + this.getHealth() + "</font><br/>"
+				+ "<font color=\"#ff0000\">-" + this.getDamage() + "</font><br/>"
+				+ "<font color=\"#00bfff\">" + this.getInitiative() + "</font>";
+		
+		return describe;
 	}
 
 	public abstract ArrayList<Pair<Integer, Integer>> getAttacks();

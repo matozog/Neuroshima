@@ -3,7 +3,6 @@ package models;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -14,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Player")
 @XmlAccessorType(XmlAccessType.FIELD)
-final public class User {
+final public class Player {
 	/**
 	 * An id of Player.
 	 */
@@ -45,7 +44,7 @@ final public class User {
 	 */
 	private ArrayList<Card> userCards = new ArrayList<Card>();
 
-	public User() {
+	public Player() {
 	};
 
 	/**
@@ -53,7 +52,7 @@ final public class User {
 	 * @param name
 	 * @param score
 	 */
-	public User(int id, String name, int score) {
+	public Player(int id, String name, int score) {
 		this.id = id;
 		this.name = name;
 		this.score = score;
@@ -105,7 +104,8 @@ final public class User {
 			Card c = Deck.GetRandomCard();
 			// Deck is empty
 			if(c != null) {
-				userCards.add(c);  
+				userCards.add(c);
+				c.setOwner(this);
 				Deck.RemoveCardFromDeck(c); 
 			}
 		}
