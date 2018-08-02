@@ -34,8 +34,7 @@ public class GameBoardPanel extends JPanel implements MouseListener{
 	
 	
 	public GameBoardPanel() {
-
-		
+	
 		this.setOpaque(false);
 		this.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		this.setBounds(305, 62, 424, 412);
@@ -78,8 +77,6 @@ public class GameBoardPanel extends JPanel implements MouseListener{
 	{
 		clearGameBoardPanel();
 		
-		this.repaint();
-		
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 
@@ -103,10 +100,8 @@ public class GameBoardPanel extends JPanel implements MouseListener{
 	}
 	
 	public void clearGameBoardPanel() {
-		for(Component component:this.getComponents())
-		{
-			if(component instanceof Field)
-			{
+		for (Component component : this.getComponents()) {
+			if (component instanceof Field) {
 				this.remove(component);
 			}
 		}

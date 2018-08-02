@@ -152,9 +152,9 @@ public class NeuroshimaApp implements ActionListener {
 	
 	public void generatePlayersPanels() {
 		for(int i=0; i<playersManager.getSelectedPlayers().size();i++) {
-			PlayerPanel playerPanel = new PlayerPanel(i);
-			playerPanel.generateThreeCardReverse();
-			frame.getContentPane().add(playerPanel);
+			Player player = playersManager.getSelectedPlayers().get(i);
+			player.createPlayerPanel(i);
+			frame.getContentPane().add(player.getPlayerPanel());
 		}
 	}
 	

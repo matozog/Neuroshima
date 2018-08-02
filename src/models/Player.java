@@ -7,6 +7,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import gui.PlayerPanel;
 
 /**
  * Abstract class of a player.
@@ -38,11 +41,17 @@ final public class Player {
 	 * Player's color on the board.
 	 */
 	private Color color;
-
+	/**
+	 * Player's panel with score and reverse cards
+	 */
+	@XmlTransient
+	private PlayerPanel panelWithScore;
 	/**
 	 * Player's deck of Cards.
 	 */
 	private ArrayList<Card> userCards = new ArrayList<Card>();
+	
+	
 
 	public Player() {
 	};
@@ -153,6 +162,20 @@ final public class Player {
 		card.setPosX(posX);
 		card.setPosY(posY);
 
+	}
+	
+	public void addPoints(int points) {
+		this.score += points;
+	}
+	
+	
+	public void createPlayerPanel(int numberOfPlayers) {
+		this.panelWithScore = new PlayerPanel(numberOfPlayers);
+		this.panelWithScore.generateThreeCardReverse();
+	}
+	
+	public PlayerPanel getPlayerPanel() {
+		return this.panelWithScore;
 	}
 
 	@Override

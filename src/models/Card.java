@@ -46,6 +46,8 @@ public abstract class Card {
 	
 	protected boolean attackedInThisTour = false;
 	
+	protected boolean death = false; 
+	
 	protected Player owner;
 
 	public Player getOwner() {
@@ -79,6 +81,14 @@ public abstract class Card {
 	
 	public void setAttackedInThisTour(boolean attackedInTour) {
 		this.attackedInThisTour = attackedInTour;
+	}
+	
+	public void setDeath(boolean isDeath) {
+		this.death = isDeath;
+	}
+	
+	public boolean isDeath() {
+		return death;
 	}
 	
 	public String getCardType() {

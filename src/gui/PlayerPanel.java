@@ -29,6 +29,7 @@ public class PlayerPanel extends JPanel{
 	
 	private PictureTools pictureTools;
 	private PlayersManager playersManager;
+	private JLabel scoreInscriptionLabel;
 	private JLabel scoreLabel;
 	private int numberOfPlayer;
 	private String title;
@@ -38,12 +39,16 @@ public class PlayerPanel extends JPanel{
 		this.numberOfPlayer = numberOfPlayer;
 		pictureTools = new PictureTools();
 		playersManager = new PlayersManager();
-		scoreLabel = new JLabel("Score: 0");
+		scoreInscriptionLabel = new JLabel("Score: ");
+		scoreLabel = new JLabel("0");
+		scoreLabel.setBounds(50, 17, 20, 16);
 		this.setLayout(null);
+		this.add(scoreInscriptionLabel);
 		this.add(scoreLabel);
 		this.setBackground(new Color(0, 0, 0, 200));
-		scoreLabel.setForeground(Color.white);
-		scoreLabel.setBounds(new Rectangle(8, 15, 100, 20));
+		scoreInscriptionLabel.setForeground(Color.white);
+		scoreLabel.setForeground(Color.WHITE);
+		scoreInscriptionLabel.setBounds(new Rectangle(8, 15, 100, 20));
 
 		this.setBounds(arrayBoundsFourPanel[numberOfPlayer]);
 		
